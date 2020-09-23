@@ -2,6 +2,9 @@ import * as Discord from 'discord.js';
 import config from '../config/config.json';
 import fs from 'fs';
 
+// import * as reactionCollector from './projects/reaction.collector';
+const reactionCollector = require('./projects/reaction.collector');
+
 const client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
@@ -15,6 +18,7 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('* Discord Bot Ready');
+	reactionCollector(client);
 });
 client.login(config.token);
 
