@@ -4,6 +4,7 @@ import fs from 'fs';
 
 // import * as reactionCollector from './projects/reaction.collector';
 const reactionCollector = require('./projects/reaction.collector');
+const uploaderFunction = require('./projects/arcdps.log.uploader');
 
 const client: any = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -19,6 +20,7 @@ const cooldowns = new Discord.Collection();
 client.once('ready', () => {
 	console.log('* Discord Bot Ready');
 	reactionCollector(client);
+	uploaderFunction(client);
 });
 client.login(config.token);
 

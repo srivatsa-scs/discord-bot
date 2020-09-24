@@ -1,5 +1,3 @@
-import { Message } from 'discord.js';
-
 const firstMessage = require('./first.message');
 module.exports = (client: any) => {
 	const channelId = '758317408787234877';

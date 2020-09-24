@@ -45,9 +45,15 @@ module.exports = {
 			}
 
 			message.channel.send(`<@!${message.author.id}>, I will send you a direct message in ${hours}h ${minutes}m ${seconds}s.`);
+			let replyMessage: string = '';
+			if (args.length > 1) {
+				for (let i = 1; i < args.length; i++) {
+					replyMessage += `${args[i]} `;
+				}
+			}
 			setTimeout(() => {
 				for (let i = 0; i < 5; i++) {
-					client.users.cache.get(message.author.id).send(`<@!${message.author.id}>`);
+					client.users.cache.get(message.author.id).send(`<@!${message.author.id}> ${replyMessage}`);
 					// message.channel.send(`<@!${message.author.id}>`);
 				}
 			}, alarmTimeout);
