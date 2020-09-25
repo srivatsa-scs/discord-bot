@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js';
 import config from '../config/config.json';
 import fs from 'fs';
+import { mongoDbHandler } from './mongodb/mongo.adapter';
 
 // import * as reactionCollector from './projects/reaction.collector';
 const reactionCollector = require('./projects/reaction.collector');
@@ -17,10 +18,12 @@ for (const file of commandFiles) {
 
 const cooldowns = new Discord.Collection();
 
-client.once('ready', () => {
-	console.log('* Discord Bot Ready');
+client.once('ready', async () => {
+	let nowDate: Date = new Date();
+	console.log(` * [${nowDate}] Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
+	// mongoDbHandler();
 });
 client.login(config.token);
 

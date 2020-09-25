@@ -6,6 +6,19 @@ const axios = require('axios').default;
 import * as config from '../../config/config.json';
 import boss from '../resources/bossmap';
 
+function timeFormatter(time: number): string {
+	let formattedTime: string = '';
+	let seconds = time % 60;
+	let minutes = Math.floor(time / 60);
+	if (time > 3600) {
+		let hours = Math.floor((time - (minutes * 60 - seconds)) / 60);
+		formattedTime = `${hours}h ${minutes}m ${seconds}s`;
+	} else {
+		formattedTime = `${minutes}m ${seconds}s`;
+	}
+	return formattedTime;
+}
+
 function uploaderFunction(client: any) {
 	const logChannelId: string = '758666283411177482';
 	const logPath: string = `${config.DPS_REPORT_FILES}**/*.zevtc`;
@@ -34,9 +47,9 @@ function uploaderFunction(client: any) {
 				.addFields(
 					{ name: 'Log Uploaded By', value: `${config.PLAYER_NAME}` },
 					{ name: 'Result', value: resp.data.encounter.success ? '✅' : '⛔' },
-					{ name: 'Duration', value: `${resp.data.encounter.duration}s` }
+					{ name: 'Duration', value: `${timeFormatter(resp.data.encounter.duration)}` }
 				)
-				.setFooter(`arcDps Version: ${resp.data.evtc.version}`);
+				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`);
 			client.channels.cache.get(logChannelId).send(embed);
 		} catch (err: any) {
 			console.error(err);
