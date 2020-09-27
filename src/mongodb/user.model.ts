@@ -6,7 +6,7 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	gw2ApiKey: [
+	gw2: [
 		{
 			accName: String,
 			apiKey: String,

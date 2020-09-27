@@ -1,0 +1,49 @@
+import { Message, MessageEmbed } from 'discord.js';
+import emoji from './get.emoji.map';
+import emojiNumber from './get.emoji.number';
+
+const filter = (reaction: any): number => {
+	switch (reaction.emoji.name) {
+		case ':zero:':
+			return 0;
+		case ':one:':
+			return 1;
+		case ':two:':
+			return 2;
+		case ':three:':
+			return 3;
+		case ':four:':
+			return 4;
+		case ':five:':
+			return 5;
+		case ':six:':
+			return 6;
+		case ':seven:':
+			return 7;
+		case ':eight:':
+			return 8;
+		case ':nine:':
+			return 9;
+		default:
+			return -1;
+	}
+};
+
+export async function awaitUserReaction(client: any, discordUserId: string, choices: Array<any>): Promise<number> {
+	let question: string = 'Pick an Account:\n';
+	for (let i = 0; i < choices.length; i++) {
+		// console.log(i);
+		question += `${emoji.get(i)}: ${choices[i].accName}\n`;
+	}
+	// console.debug(discordUserId);
+	const responseMessage = await client.users.cache.get(discordUserId).send(question);
+	for (let i = 0; i < choices.length; i++) {
+		await responseMessage.react(emoji.get(i));
+	}
+	const collector = await responseMessage.awaitReactions(filter, { max: 1, time: 15000 });
+
+	return emojiNumber.get(collector.first().emoji.name);
+	// collector.on('collect', (reaction: any) => {
+	// 	return emojiNumber.get(reaction.emoji.name);
+	// });
+}

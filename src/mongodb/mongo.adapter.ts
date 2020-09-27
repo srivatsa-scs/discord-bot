@@ -1,6 +1,8 @@
+import { debug } from 'console';
 import mongoose from 'mongoose';
 import * as config from '../../config/config.json';
-const User = require('./user.model');
+import { fetchGw2AccName } from '../gw2api/find.account.name';
+const UserModel = require('./user.model');
 
 mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (err: any) => {
 	if (err) {
@@ -21,8 +23,8 @@ export function mongoDbHandler() {
 	// 	}
 	// });
 
-	let user = new User({ discord: config.DISCORD_USER_ID, gw2ApiKey: [{ accName: config.GW2_ACC_NAME, apiKey: config.GW2_API_KEY }] });
-	User.findOne({ discord: config.DISCORD_USER_ID }, async (err: any, docs: any) => {
+	let user = new UserModel({ discord: config.DISCORD_USER_ID, gw2ApiKey: [{ accName: config.GW2_ACC_NAME, apiKey: config.GW2_API_KEY }] });
+	UserModel.findOne({ discord: config.DISCORD_USER_ID }, async (err: any, docs: any) => {
 		if (err) console.log('Error');
 		else {
 			if (docs) {
@@ -43,29 +45,89 @@ export function mongoDbHandler() {
 
 export async function findAllApiKeys(discordUserId: string): Promise<any> {
 	try {
-		const resp = await User.findOne({ discord: discordUserId }).exec();
+		const resp = await UserModel.findOne({ discord: discordUserId }).exec();
 		if (resp) {
-			return resp.gw2ApiKey;
+			return resp.gw2;
 		} else return [];
 	} catch (err) {
 		console.log(err);
 		return { error: 'An error occoured when checking the database.' };
 	}
-
-	// User.findOne({ discord: discordUserId }, (err: any, docs: any) => {
-	// 	if (err) {
-	// 		console.error(err);
-	// 		return { error: 'An error occoured when checking the database.' };
-	// 	} else {
-	// 		if (docs) {
-	// 			/* Non-empty array = keys exist (maybe invalid) */
-	// 			return { keys: docs.gw2ApiKey };
-	// 		} else {
-	// 			/* Empty array = no keys */
-	// 			return { keys: [] };
-	// 		}
-	// 	}
-	// });
-	/* This should never happen */
-	return { error: `An error occoured when checking the database. This shouldn't ever happen` };
 }
+
+export async function getAccInfo(apiKey: string, discordUserId: string): Promise<string> {
+	try {
+		const resp = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
+		if (resp) {
+			console.log(resp);
+		}
+	} catch (err) {
+		console.log('Error occoured with Database');
+	}
+	return '';
+}
+
+export async function insertApiKey(apiKey: string, discordUserId: string): Promise<number> {
+	try {
+		const resp = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
+		if (resp) {
+			console.debug('* Discord user already exists');
+			let accAlreadyExists: boolean = false;
+
+			/* Check to see if the API key is present in the database */
+			for (let element of resp.gw2) {
+				if (element.apiKey === apiKey) {
+					accAlreadyExists = true;
+					break;
+				}
+			}
+			if (!accAlreadyExists) {
+				console.debug('* Account does not exist');
+				const accName: string = await fetchGw2AccName(apiKey);
+				if (accName === '') {
+					return 5;
+				} else {
+					const dbResp = await UserModel.updateOne(
+						{ _id: resp._id },
+						{
+							$push: {
+								gw2: { accName: accName, apiKey: apiKey },
+							},
+						}
+					);
+					if (dbResp.ok === 1) {
+						console.debug('* New API Key has been added');
+						return 0;
+					} else return 5;
+				}
+			} else {
+				console.log('* API key already exists');
+				return 2;
+			}
+		} else {
+			console.log(`* Discord user does not exist`);
+			const accName: string = await fetchGw2AccName(apiKey);
+			console.log(accName);
+			const newUser = new UserModel({
+				discord: discordUserId,
+				gw2: {
+					accName: accName,
+					apiKey: apiKey,
+				},
+			});
+			const dbSaveResp = await newUser.save();
+			return 0;
+		}
+	} catch (err) {
+		return 5;
+	}
+}
+
+/* Return Codes */
+
+// 0: New discord user created
+// 1: New API key added
+// 2: API key already exists
+// 3: Issue with fetching name
+// 4: Issue with database
+// 5: Unknown error
