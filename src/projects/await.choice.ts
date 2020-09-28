@@ -32,7 +32,6 @@ const filter = (reaction: any): number => {
 export async function awaitUserReaction(client: any, discordUserId: string, choices: Array<any>): Promise<number> {
 	let question: string = 'Pick an Account:\n';
 	for (let i = 0; i < choices.length; i++) {
-		// console.log(i);
 		question += `${emoji.get(i)}: ${choices[i].accName}\n`;
 	}
 	// console.debug(discordUserId);
@@ -40,9 +39,14 @@ export async function awaitUserReaction(client: any, discordUserId: string, choi
 	for (let i = 0; i < choices.length; i++) {
 		await responseMessage.react(emoji.get(i));
 	}
-	const collector = await responseMessage.awaitReactions(filter, { max: 1, time: 15000 });
+	try {
+		const collector = await responseMessage.awaitReactions(filter, { max: 1, time: 15000, errors: ['time'] });
+		return emojiNumber.get(collector.first().emoji.name);
+	} catch (err) {
+		console.log(err);
+		return 0;
+	}
 
-	return emojiNumber.get(collector.first().emoji.name);
 	// collector.on('collect', (reaction: any) => {
 	// 	return emojiNumber.get(reaction.emoji.name);
 	// });

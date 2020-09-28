@@ -3,6 +3,9 @@ import { Client, Collection, Message, MessageReaction, Snowflake, User } from 'd
 module.exports = {
 	name: 'vote',
 	description: 'thumbs up thumbs down',
+	guildOnly: true,
+	usage: [''],
+	tooltip: ['Reacts with 👍👎'],
 	async execute(client: Client, message: Message, args: any) {
 		await message.react('👍');
 		await message.react('👎');

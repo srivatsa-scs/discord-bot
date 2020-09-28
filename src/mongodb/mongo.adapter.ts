@@ -4,7 +4,7 @@ import * as config from '../../config/config.json';
 import { fetchGw2AccName } from '../gw2api/find.account.name';
 const UserModel = require('./user.model');
 
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (err: any) => {
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, (err: any) => {
 	if (err) {
 		console.log('Failed to connect to Database');
 	} else {
@@ -121,6 +121,19 @@ export async function insertApiKey(apiKey: string, discordUserId: string): Promi
 	} catch (err) {
 		return 5;
 	}
+}
+
+export async function removeApiKey(_id: string, discordUserId: string) {
+	const user = await UserModel.findOne({ discord: discordUserId });
+	UserModel.findOneAndUpdate({ _id: user._id }, { $pull: { gw2: { _id: _id } } }, { new: true }, (err: any) => {
+		if (err) {
+			console.log(err);
+			return false;
+		} else {
+			console.log('removed');
+			return true;
+		}
+	});
 }
 
 /* Return Codes */

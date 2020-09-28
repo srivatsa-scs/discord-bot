@@ -4,6 +4,9 @@ module.exports = {
 	name: 'commands',
 	description: 'lists all commands',
 	cooldown: 5,
+	guildOnly: true,
+	usage: [' '],
+	tooltip: ['Displays a list of commands.'],
 	execute(client: any, message: any, args: any) {
 		const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
 		let commands: string = '';

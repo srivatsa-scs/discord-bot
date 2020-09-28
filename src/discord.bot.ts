@@ -1,18 +1,16 @@
 import * as Discord from 'discord.js';
 import config from '../config/config.json';
 import fs from 'fs';
-import { mongoDbHandler } from './mongodb/mongo.adapter';
 
-// import * as reactionCollector from './projects/reaction.collector';
 const reactionCollector = require('./projects/reaction.collector');
 const uploaderFunction = require('./projects/arcdps.log.uploader');
+const { prefix } = require('../config/config.json');
 
 const client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-
 	client.commands.set(command.name, command);
 }
 
@@ -23,14 +21,13 @@ client.once('ready', async () => {
 	console.log(` * [${nowDate}] Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
-	// mongoDbHandler();
 });
 client.login(config.token);
 
 client.on('message', (message: any) => {
-	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName);
 
@@ -52,7 +49,28 @@ client.on('message', (message: any) => {
 			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 		}
 	}
-
+	/* Channel only or Not*/
+	if (command.guildOnly && message.channel.type === 'dm') {
+		return message.reply("I can't execute that command inside DMs!");
+	}
+	if (args[0] === '--help' || args[0] === '-h') {
+		// console.log('Enter the --help block');
+		let helpFields: Array<any> = [];
+		for (let i = 0; i < command.usage.length; i++) {
+			helpFields[i] = { name: `${prefix}${command.name} ${command.usage[i]}`, value: `${command.tooltip[i]}` };
+		}
+		const responseEmbed = new Discord.MessageEmbed().setColor('77ffff').setTitle(`${prefix}${command.name} Help`).addFields(helpFields).setTimestamp();
+		return message.reply(responseEmbed);
+	}
+	/* Does it require arguments */
+	if (command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${message.author}!`;
+		if (command.usage) {
+			reply += `\n Usage: \`${prefix}${command.name} ${command.usage}`;
+		}
+		return message.channel.send(reply);
+	}
+	/* Actual Command */
 	try {
 		command.execute(client, message, args);
 		timestamps.set(message.author.id, now);

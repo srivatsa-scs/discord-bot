@@ -40,7 +40,7 @@ function uploaderFunction(client: any) {
 			console.log(resp.data);
 
 			const embed = new MessageEmbed()
-				.setColor('#ff0000')
+				.setColor(resp.data.encounter.success ? '#00ff00' : '#ff0000')
 				.setTitle(`${boss.get(resp.data.encounter.bossId).name}${resp.data.encounter.isCM ? ' CM' : ''}`)
 				.setURL(resp.data.permalink)
 				.setThumbnail(boss.get(resp.data.encounter.bossId).thumbnail)
@@ -49,7 +49,8 @@ function uploaderFunction(client: any) {
 					{ name: 'Result', value: resp.data.encounter.success ? '✅' : '⛔' },
 					{ name: 'Duration', value: `${timeFormatter(resp.data.encounter.duration)}` }
 				)
-				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`);
+				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`)
+				.setTimestamp();
 			client.channels.cache.get(logChannelId).send(embed);
 		} catch (err: any) {
 			console.error(err);

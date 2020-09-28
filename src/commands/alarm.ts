@@ -2,6 +2,10 @@ module.exports = {
 	name: 'alarm',
 	description: 'It sets an alarm!',
 	cooldown: 5,
+	args: true,
+	guildOnly: true,
+	usage: ['<time> <message>'],
+	tooltip: ['You can set an reminder for upto 12h with an optional message.'],
 	execute(client: any, message: any, args: any) {
 		if (args[0]) {
 			let alarmTimeout = 1000;
@@ -38,7 +42,6 @@ module.exports = {
 				hours += Math.floor(minutes / 60);
 				minutes %= 60;
 			}
-			// console.log(hours, minutes, seconds);
 			alarmTimeout *= hours * 3600 + minutes * 60 + seconds;
 			if (alarmTimeout > 43200000) {
 				return message.channel.send(`<@!${message.author.id}> max alarm time is 12h`);
@@ -54,7 +57,6 @@ module.exports = {
 			setTimeout(() => {
 				for (let i = 0; i < 5; i++) {
 					client.users.cache.get(message.author.id).send(`<@!${message.author.id}> ${replyMessage}`);
-					// message.channel.send(`<@!${message.author.id}>`);
 				}
 			}, alarmTimeout);
 		} else {
