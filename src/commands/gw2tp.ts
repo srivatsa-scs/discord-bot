@@ -14,10 +14,10 @@ module.exports = {
 	async execute(client: any, message: any, args: any) {
 		let formattedFields = [];
 		const discordUserId = message.author.id;
-		message.delete({ timeout: 5000 });
+
 		/* One or more Args provided */
 		if (args[0] === 'add') {
-			//let key of args
+			message.delete({ timeout: 5000 });
 			for (let i = 1; i < args.length; i++) {
 				let valid: boolean = await validateGw2ApiToken(args[i]);
 				let insertResponseCode: number;
@@ -52,7 +52,7 @@ module.exports = {
 						formattedFields.push({ name: 'You have nothing', value: 'Jon Snow' });
 					}
 					if (resp?.totalCoins) {
-						formattedFields.push({ name: 'Coins', value: `${resp?.totalCoins.gold} ${resp?.totalCoins.silver}s ${resp?.totalCoins.copper}c` });
+						formattedFields.push({ name: 'Coins', value: `${resp?.totalCoins.gold}g ${resp?.totalCoins.silver}s ${resp?.totalCoins.copper}c` });
 					}
 					if (resp!.totalItems.length > 0) {
 						for (let items of resp!.totalItems) {
@@ -63,15 +63,14 @@ module.exports = {
 			} else {
 				formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
 			}
-
-			const embed = new MessageEmbed()
-				.setColor('#ff0000')
-				.setTitle(`GW2 Trading Post`)
-				.setThumbnail(`https://wiki.guildwars2.com/images/b/be/Black_Lion_Trading_Company_trading_post_icon.png`)
-				.addFields(formattedFields)
-				.setTimestamp();
-
-			client.users.cache.get(discordUserId).send(embed);
 		}
+		const embed = new MessageEmbed()
+			.setColor('#ff0000')
+			.setTitle(`GW2 Trading Post`)
+			.setThumbnail(`https://wiki.guildwars2.com/images/b/be/Black_Lion_Trading_Company_trading_post_icon.png`)
+			.addFields(formattedFields)
+			.setTimestamp();
+
+		client.users.cache.get(discordUserId).send(embed);
 	},
 };

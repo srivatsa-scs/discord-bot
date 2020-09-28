@@ -6,4 +6,5 @@ puns.set(3, `How do you come up with these puns? I'm a pundit.`);
 puns.set(4, `What do you call an unidentified tree? A Mystree.`);
 puns.set(5, `How do I go about making awesome puns? As with anything you get started with the Pundamentals.`);
 puns.set(6, `You can count me to make puns, I'm very depundadable.`);
+puns.set(7, `What do you call a Jalapeno whose seeds have been removed? A Hollow-peno`);
 export default puns;
