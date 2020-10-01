@@ -36,9 +36,9 @@ function uploaderFunction(client: any) {
 			const metaData: any = await axios.get(`${metaDataUrl}${resp.data.permalink.substring(19)}`);
 			const embed = new MessageEmbed()
 				.setColor(resp.data.encounter.success ? '#00ff00' : '#ff0000')
-				.setTitle(`${boss.get(resp.data.encounter.bossId).name}${resp.data.encounter.isCM ? ' CM' : ''}`)
+				.setTitle(`${metaData.data.fightname || boss.get(resp.data.encounter.bossId).name}${resp.data.encounter.isCM ? ' CM' : ''}`)
 				.setURL(resp.data.permalink)
-				.setThumbnail(boss.get(resp.data.encounter.bossId).thumbnail)
+				.setThumbnail(metaData.data.fightIcon || boss.get(resp.data.encounter.bossId).thumbnail)
 				.addFields(
 					{ name: 'Log Uploaded By', value: `${metaData.data.recordedBy || 'Unknown'}` },
 					{ name: 'Result', value: resp.data.encounter.success ? '✅' : '⛔' },
