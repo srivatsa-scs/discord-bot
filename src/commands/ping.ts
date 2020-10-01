@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'ping',
-	description: 'Ping!',
+	description: 'replies with Pong',
 	cooldown: 5,
 	guildOnly: true,
 	usage: [''],

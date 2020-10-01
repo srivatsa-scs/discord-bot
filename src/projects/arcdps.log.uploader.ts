@@ -23,29 +23,24 @@ function uploaderFunction(client: any) {
 	const logChannelId: string = '758666283411177482';
 	const logPath: string = `${config.DPS_REPORT_FILES}**/*.zevtc`;
 	const uploadUrl: string = `https://dps.report/uploadContent?json=1&generator=ei&userToken=${config.DPS_REPORT_USER_TOKEN}`;
+	const metaDataUrl: string = `https://dps.report/getJson?permalink=`;
 
 	const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
 
 	watcher.on('add', async (path) => {
-		// console.log(`File ${path} has been added`);
-
 		let form = FormData();
 		form.append('file', fs.createReadStream(path));
 
 		try {
 			const resp: any = await axios.post(uploadUrl, form, { headers: form.getHeaders() });
-			// console.log(resp.data.encounter.bossId);
-			// console.log(boss.get(resp.data.encounter.bossId));
-
-			console.log(resp.data);
-
+			const metaData: any = await axios.get(`${metaDataUrl}${resp.data.permalink.substring(19)}`);
 			const embed = new MessageEmbed()
 				.setColor(resp.data.encounter.success ? '#00ff00' : '#ff0000')
 				.setTitle(`${boss.get(resp.data.encounter.bossId).name}${resp.data.encounter.isCM ? ' CM' : ''}`)
 				.setURL(resp.data.permalink)
 				.setThumbnail(boss.get(resp.data.encounter.bossId).thumbnail)
 				.addFields(
-					{ name: 'Log Uploaded By', value: `${config.PLAYER_NAME}` },
+					{ name: 'Log Uploaded By', value: `${metaData.data.recordedBy || 'Unknown'}` },
 					{ name: 'Result', value: resp.data.encounter.success ? '✅' : '⛔' },
 					{ name: 'Duration', value: `${timeFormatter(resp.data.encounter.duration)}` }
 				)
