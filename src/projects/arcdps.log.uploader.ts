@@ -50,7 +50,12 @@ function uploaderFunction(client: any) {
 				.setTimestamp();
 			client.channels.cache.get(logChannelId).send(embed);
 		} catch (err: any) {
-			console.error(err);
+			if (err.response.status === 403 && err.response.data.error === 'Encounter is too short for a useful report to be made') {
+				console.log(err.response.data.error);
+				return;
+			} else {
+				console.error(err);
+			}
 		}
 	});
 }
