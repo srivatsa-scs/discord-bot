@@ -34,15 +34,17 @@ function uploaderFunction(client: any) {
 		try {
 			const resp: any = await axios.post(uploadUrl, form, { headers: form.getHeaders() });
 			const metaData: any = await axios.get(`${metaDataUrl}${resp.data.permalink.substring(19)}`);
+			const fightname = `${metaData.data.fightName}${resp.data.encounter.isCM ? ' CM' : ''}`;
+
 			const embed = new MessageEmbed()
 				.setColor(resp.data.encounter.success ? '#00ff00' : '#ff0000')
-				.setTitle(`${metaData.data.fightname || boss.get(resp.data.encounter.bossId).name}${resp.data.encounter.isCM ? ' CM' : ''}`)
+				.setTitle(`${fightname}`)
 				.setURL(resp.data.permalink)
 				.setThumbnail(metaData.data.fightIcon || boss.get(resp.data.encounter.bossId).thumbnail)
 				.addFields(
 					{ name: 'Log Uploaded By', value: `${metaData.data.recordedBy || 'Unknown'}` },
 					{ name: 'Result', value: resp.data.encounter.success ? '✅' : '⛔' },
-					{ name: 'Duration', value: `${timeFormatter(resp.data.encounter.duration)}` }
+					{ name: 'Duration', value: `${metaData.data.duration || timeFormatter(resp.data.encounter.duration)}` }
 				)
 				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`)
 				.setTimestamp();
