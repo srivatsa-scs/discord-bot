@@ -2,4 +2,4 @@
 config/config.json
 # Node Modules
 node_modules/
-src/commands/roster.ts
+/src/commands/roster.ts
