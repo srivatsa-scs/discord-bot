@@ -20,8 +20,8 @@ function timeFormatter(time: number): string {
 }
 
 function uploaderFunction(client: any) {
-	const logChannelId: string = '758666283411177482';
-	const logPath: string = `${config.DPS_REPORT_FILES}**/*.zevtc`;
+	const logChannelId: string = config.LOG_CHANNEL_ID;
+	const logPath: string = `${config.DPS_REPORT_FILES}**/*.${config.ARC_DPS_LOG_FILE_EXTENSION}`;
 	const uploadUrl: string = `https://dps.report/uploadContent?json=1&generator=ei&userToken=${config.DPS_REPORT_USER_TOKEN}`;
 	const metaDataUrl: string = `https://dps.report/getJson?permalink=`;
 

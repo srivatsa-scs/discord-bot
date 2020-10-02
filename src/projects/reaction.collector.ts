@@ -1,6 +1,7 @@
+import config from '../../config/config.json';
 const firstMessage = require('./first.message');
 module.exports = (client: any) => {
-	const channelId = '758317408787234877';
+	const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;
 	const reactions = ['✅']; // Add additional options here
 
 	let emojiText = 'Add reaction to sign up for this weeks raid\n';
@@ -9,10 +10,10 @@ module.exports = (client: any) => {
 	firstMessage(client, channelId, emojiText, reactions);
 
 	const handleReaction = (reaction: any, user: any, add: boolean) => {
-		if (user.id === '757890240437551224') return;
+		if (user.id === config.DISCORD_BOT_USER_ID) return;
 		const emoji = reaction._emoji.name;
 		const { guild } = reaction.message;
-		const roleId = '758323143214891008';
+		const roleId = config.CUSTOM_ROLE_ID;
 		const member = guild.members.cache.find((member: any) => member.id === user.id);
 		if (add) {
 			member.roles.add(roleId);

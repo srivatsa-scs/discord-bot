@@ -1,4 +1,3 @@
-import { debug } from 'console';
 import mongoose from 'mongoose';
 import * as config from '../../config/config.json';
 import { fetchGw2AccName } from '../gw2api/find.account.name';

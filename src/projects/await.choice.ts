@@ -1,4 +1,3 @@
-import { Message, MessageEmbed } from 'discord.js';
 import emoji from './get.emoji.map';
 import emojiNumber from './get.emoji.number';
 
