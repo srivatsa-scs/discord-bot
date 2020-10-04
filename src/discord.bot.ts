@@ -21,6 +21,7 @@ client.once('ready', async () => {
 	console.log(` * [${nowDate}] Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
+	client.user.setActivity('!command --help');
 });
 client.login(config.token);
 

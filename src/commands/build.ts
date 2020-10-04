@@ -5,7 +5,7 @@ module.exports = {
 	description: 'formats builds in an embed format',
 	cooldown: 5,
 	guildOnly: true,
-	usage: ['add <build-name-with-no-space> <class-name-with-no-space> <link-to-buiild>'],
+	usage: ['add <build-name-with-no-space> <class-name-for-the-icon> <link-to-build>'],
 	tooltip: ['Creates an embed with the build link'],
 	execute(client: any, message: any, args: any) {
 		if (args[0] === 'add') {
