@@ -69,12 +69,12 @@ raids.set(7, {
 
 let totalRaids: Array<string> = [
 	'vale_guardian',
-	'gorseval',
 	'spirit_woods',
+	'gorseval',
 	'sabetha',
 
-	'bandit_trio',
 	'slothasor',
+	'bandit_trio',
 	'matthias',
 
 	'escort',
