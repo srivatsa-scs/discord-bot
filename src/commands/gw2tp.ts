@@ -14,56 +14,29 @@ module.exports = {
 	async execute(client: any, message: any, args: any) {
 		let formattedFields = [];
 		const discordUserId = message.author.id;
+		/* Look up keys that are stored in the database for that user */
 
-		/* One or more Args provided */
-		if (args[0] === 'add') {
-			message.delete({ timeout: 5000 });
-			for (let i = 1; i < args.length; i++) {
-				let valid: boolean = await validateGw2ApiToken(args[i]);
-				let insertResponseCode: number;
-				if (valid) {
-					insertResponseCode = await insertApiKey(args[i], discordUserId);
-				} else insertResponseCode = -1;
+		const dbResp: any = await findAllApiKeys(discordUserId);
+		if (dbResp.length > 0) {
+			const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
+			/* No Args provided */
+			const resp = await maingw2(dbResp[choice].apiKey);
 
-				formattedFields.push({
-					name: insertResponseDecoder.get(insertResponseCode),
-					value: args[i],
-				});
+			if (resp!.totalCoins === undefined && resp!.totalItems.length === 0) {
+				formattedFields.push({ name: 'You have nothing', value: 'Jon Snow' });
 			}
-			// console.log(keyValidityArray);
-		} else {
-			/* Look up keys that are stored in the database for that user */
-
-			const dbResp: any = await findAllApiKeys(discordUserId);
-			if (dbResp.length > 0) {
-				const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
-				if (args[0] === 'remove') {
-					const deleteResp = removeApiKey(dbResp[choice]._id, discordUserId);
-					if (deleteResp) {
-						formattedFields.push({ name: dbResp[choice].accName, value: 'Removed Successfully' });
-					} else {
-						formattedFields.push({ name: dbResp[choice].accName, value: 'Error Occoured while removing' });
-					}
-				} else {
-					/* No Args provided */
-					const resp = await maingw2(dbResp[choice].apiKey);
-
-					if (resp!.totalCoins === undefined && resp!.totalItems.length === 0) {
-						formattedFields.push({ name: 'You have nothing', value: 'Jon Snow' });
-					}
-					if (resp?.totalCoins) {
-						formattedFields.push({ name: 'Coins', value: `${resp?.totalCoins.gold}g ${resp?.totalCoins.silver}s ${resp?.totalCoins.copper}c` });
-					}
-					if (resp!.totalItems.length > 0) {
-						for (let items of resp!.totalItems) {
-							formattedFields.push({ name: items.name, value: items.count });
-						}
-					}
+			if (resp?.totalCoins) {
+				formattedFields.push({ name: 'Coins', value: `${resp?.totalCoins.gold}g ${resp?.totalCoins.silver}s ${resp?.totalCoins.copper}c` });
+			}
+			if (resp!.totalItems.length > 0) {
+				for (let items of resp!.totalItems) {
+					formattedFields.push({ name: items.name, value: items.count });
 				}
-			} else {
-				formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
 			}
+		} else {
+			formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
 		}
+
 		const embed = new MessageEmbed()
 			.setColor('#ff0000')
 			.setTitle(`GW2 Trading Post`)

@@ -122,7 +122,7 @@ export async function insertApiKey(apiKey: string, discordUserId: string): Promi
 	}
 }
 
-export async function removeApiKey(_id: string, discordUserId: string) {
+export async function removeApiKey(_id: string, discordUserId: string): Promise<Boolean> {
 	const user = await UserModel.findOne({ discord: discordUserId });
 	UserModel.findOneAndUpdate({ _id: user._id }, { $pull: { gw2: { _id: _id } } }, { new: true }, (err: any) => {
 		if (err) {
@@ -133,6 +133,7 @@ export async function removeApiKey(_id: string, discordUserId: string) {
 			return true;
 		}
 	});
+	return false;
 }
 
 /* Return Codes */
