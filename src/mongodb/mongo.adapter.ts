@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import * as config from '../../config/config.json';
 import { fetchGw2AccName } from '../gw2api/find.account.name';
-const UserModel = require('./user.model');
+import UserModel from './user.model';
 
 mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, (err: any) => {
 	if (err) {
@@ -44,7 +44,7 @@ export function mongoDbHandler() {
 
 export async function findAllApiKeys(discordUserId: string): Promise<any> {
 	try {
-		const resp = await UserModel.findOne({ discord: discordUserId }).exec();
+		const resp: any = await UserModel.findOne({ discord: discordUserId }).exec();
 		if (resp) {
 			return resp.gw2;
 		} else return [];
@@ -68,7 +68,7 @@ export async function getAccInfo(apiKey: string, discordUserId: string): Promise
 
 export async function insertApiKey(apiKey: string, discordUserId: string): Promise<number> {
 	try {
-		const resp = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
+		const resp: any = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
 		if (resp) {
 			console.debug('* Discord user already exists');
 			let accAlreadyExists: boolean = false;
@@ -124,16 +124,16 @@ export async function insertApiKey(apiKey: string, discordUserId: string): Promi
 
 export async function removeApiKey(_id: string, discordUserId: string): Promise<Boolean> {
 	const user = await UserModel.findOne({ discord: discordUserId });
-	UserModel.findOneAndUpdate({ _id: user._id }, { $pull: { gw2: { _id: _id } } }, { new: true }, (err: any) => {
+	let removalResponse: boolean = false;
+	await UserModel.findOneAndUpdate({ _id: user!._id }, { $pull: { gw2: { _id: _id } } }, { new: true }, (err: any) => {
 		if (err) {
 			console.log(err);
-			return false;
+			removalResponse = false;
 		} else {
-			console.log('removed');
-			return true;
+			removalResponse = true;
 		}
 	});
-	return false;
+	return removalResponse;
 }
 
 /* Return Codes */

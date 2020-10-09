@@ -7,8 +7,8 @@ module.exports = {
 	name: 'gw2',
 	description: 'used to add and remove api keys',
 	guildOnly: true,
-	tooltip: [],
-	usage: [],
+	tooltip: [`Allows you to add one or more API Keys`, `Allows you to remove an API key`],
+	usage: ['add <enter-your-api-key-here>', 'remove'],
 	async execute(client: any, message: any, args: Array<string>) {
 		let formattedFields: Array<any> = [];
 		let responseTitle: string = 'Add / Remove API keys';
@@ -34,6 +34,8 @@ module.exports = {
 			if (dbResp.length > 0) {
 				const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
 				const deleteResp = await removeApiKey(dbResp[choice]._id, discordUserId);
+				console.log(dbResp[choice], deleteResp);
+
 				if (deleteResp) {
 					formattedFields.push({ name: dbResp[choice].accName, value: 'Removed Successfully' });
 				} else {
@@ -46,7 +48,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setColor('#ff0000')
 			.setTitle(responseTitle)
-			.setThumbnail(`https://wiki.guildwars2.com/images/b/be/Black_Lion_Trading_Company_trading_post_icon.png`)
+			.setThumbnail(`https://wiki.guildwars2.com/images/e/e8/Jumping_puzzle_%28map_icon%29.png`)
 			.addFields(formattedFields)
 			.setTimestamp();
 

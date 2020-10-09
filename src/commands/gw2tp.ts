@@ -9,8 +9,8 @@ module.exports = {
 	name: 'gw2tp',
 	description: 'checks the gw2 trading post',
 	guildOnly: true,
-	tooltip: [`Allows you to check trading post of accounts you've linked to this bot`, `Allows you to add one or more API Keys`, `Allows you to remove an API key`],
-	usage: ['', 'add <enter-your-api-key-here>', 'remove'],
+	tooltip: [`Allows you to check trading post of accounts you've linked to this bot`],
+	usage: ['\u200B'],
 	async execute(client: any, message: any, args: any) {
 		let formattedFields = [];
 		const discordUserId = message.author.id;

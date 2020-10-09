@@ -14,4 +14,4 @@ const userSchema = new Schema({
 	],
 });
 
-module.exports = mongoose.model('user', userSchema, 'gw2-api-keys');
+export default mongoose.model('user', userSchema, 'gw2-api-keys');
