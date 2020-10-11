@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { Client, Message, MessageEmbed } from 'discord.js';
 import classMap from '../resources/class.icon.map';
 module.exports = {
 	name: 'build',
@@ -7,7 +7,7 @@ module.exports = {
 	guildOnly: true,
 	usage: ['add <build-name-with-no-space> <class-name-for-the-icon> <link-to-build>'],
 	tooltip: ['Creates an embed with the build link'],
-	execute(client: any, message: any, args: any) {
+	execute(client: Client, message: Message, args: Array<string>) {
 		if (args[0] === 'add') {
 			args[2] = args[2].toLowerCase();
 			let thumbnail: string = '';

@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { Client, Message, MessageEmbed } from 'discord.js';
 import { validateGw2ApiToken } from '../gw2api/check.apikey.perms';
 import { findAllApiKeys, insertApiKey, removeApiKey } from '../mongodb/mongo.adapter';
 import insertResponseDecoder from '../mongodb/insert.response.decoder';
@@ -9,7 +9,7 @@ module.exports = {
 	guildOnly: true,
 	tooltip: [`Allows you to add one or more API Keys`, `Allows you to remove an API key`],
 	usage: ['add <enter-your-api-key-here>', 'remove'],
-	async execute(client: any, message: any, args: Array<string>) {
+	async execute(client: Client, message: Message, args: Array<string>) {
 		let formattedFields: Array<any> = [];
 		let responseTitle: string = 'Add / Remove API keys';
 		const discordUserId = message.author.id;
@@ -52,6 +52,6 @@ module.exports = {
 			.addFields(formattedFields)
 			.setTimestamp();
 
-		return client.users.cache.get(discordUserId).send(embed);
+		return client.users.cache.get(discordUserId)!.send(embed);
 	},
 };

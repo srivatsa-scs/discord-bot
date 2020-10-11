@@ -9,12 +9,12 @@ module.exports = {
 	cooldown: 5,
 	usage: ['\u200B'],
 	tooltip: ['Shows you the list of raids that have not been completed.'],
-	async execute(client: any, message: Message, args: Array<string>) {
+	async execute(client: Client, message: Message, args: Array<string>) {
 		const discordUserId: string = message.author.id;
 		const dbResp: any = await findAllApiKeys(discordUserId);
 		let formattedFields: any = [];
 		if (dbResp.length > 0) {
-			const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
+			const choice: number = await awaitUserReaction(client, discordUserId, dbResp);
 			const completedRaids = await getCompletedRaids(dbResp[choice].apiKey);
 
 			let incompleteRaids = totalRaids.filter((val: string) => !completedRaids.includes(val));
@@ -42,10 +42,10 @@ module.exports = {
 				}
 			}
 		} else {
-			formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
+			formattedFields.push({ name: '❌ API Key not found ❌', value: `Beep-Boop, You don't have any API keys stored with me` });
 		}
 
 		let embed: MessageEmbed = new MessageEmbed().setTitle('Raids').addFields(formattedFields).setTimestamp().setThumbnail('https://wiki.guildwars2.com/images/5/5e/Legendary_Insight.png');
-		return client.users.cache.get(discordUserId).send(embed);
+		return client.users.cache.get(discordUserId)!.send(embed);
 	},
 };

@@ -1,3 +1,4 @@
+import { Client, Message } from 'discord.js';
 import puns from '../resources/punmap';
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
 	guildOnly: true,
 	usage: [''],
 	tooltip: ['Replies with a random pun'],
-	execute(client: any, message: any, args: any) {
+	execute(client: Client, message: Message, args: Array<string>) {
 		message.channel.send(puns.get(Math.floor(Math.random() * puns.size)));
 	},
 };

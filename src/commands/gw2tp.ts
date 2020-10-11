@@ -1,8 +1,6 @@
 import { MessageEmbed } from 'discord.js';
-import { validateGw2ApiToken } from '../gw2api/check.apikey.perms';
 import { maingw2 } from '../gw2api/gw2api.main';
-import { findAllApiKeys, insertApiKey, removeApiKey } from '../mongodb/mongo.adapter';
-import insertResponseDecoder from '../mongodb/insert.response.decoder';
+import { findAllApiKeys } from '../mongodb/mongo.adapter';
 import { awaitUserReaction } from '../projects/await.choice';
 
 module.exports = {

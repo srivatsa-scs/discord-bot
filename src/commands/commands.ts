@@ -1,3 +1,4 @@
+import { Client, Message } from 'discord.js';
 import fs from 'fs';
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
 	guildOnly: true,
 	usage: [' '],
 	tooltip: ['Displays a list of commands.'],
-	execute(client: any, message: any, args: any) {
+	execute(client: Client, message: Message, args: Array<string>) {
 		const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
 		let commands: string = '';
 		commandFiles.forEach((file: any) => {

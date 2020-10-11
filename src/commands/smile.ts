@@ -1,3 +1,5 @@
+import { Client, Message } from 'discord.js';
+
 module.exports = {
 	name: 'smile',
 	description: 'reacts with a smiley',
@@ -5,7 +7,7 @@ module.exports = {
 	guildOnly: true,
 	usage: [''],
 	tooltip: ['Reacts with a smiley'],
-	execute(client: any, message: any, args: any) {
+	execute(client: Client, message: Message, args: Array<string>) {
 		message.react('😄');
 	},
 };
