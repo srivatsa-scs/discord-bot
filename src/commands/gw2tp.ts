@@ -32,7 +32,7 @@ module.exports = {
 				}
 			}
 		} else {
-			formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
+			formattedFields.push({ name: '❌ API Key not found ❌', value: `Beep-Boop, You don't have any API keys stored with me. Use !gw2 add <Enter-your-api-key> to add an API key.` });
 		}
 
 		const embed = new MessageEmbed()
