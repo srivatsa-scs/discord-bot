@@ -7,6 +7,7 @@ module.exports = {
 	name: 'raids',
 	description: 'allows to check which raid wings are not still completed',
 	cooldown: 5,
+	guildOnly: false,
 	usage: ['\u200B'],
 	tooltip: ['Shows you the list of raids that have not been completed.'],
 	async execute(client: Client, message: Message, args: Array<string>) {

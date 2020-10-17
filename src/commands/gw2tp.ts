@@ -6,7 +6,7 @@ import { awaitUserReaction } from '../projects/await.choice';
 module.exports = {
 	name: 'gw2tp',
 	description: 'checks the gw2 trading post',
-	guildOnly: true,
+	guildOnly: false,
 	tooltip: [`Allows you to check trading post of accounts you've linked to this bot`],
 	usage: ['\u200B'],
 	async execute(client: any, message: any, args: any) {
