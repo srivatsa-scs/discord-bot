@@ -53,6 +53,8 @@ function uploaderFunction(client: any) {
 			if (err.response.status === 403 && err.response.data.error === 'Encounter is too short for a useful report to be made') {
 				console.log(err.response.data.error);
 				return;
+			} else if (err.response.status === 523) {
+				console.log(`Cloudflare Error, try later. ${path}`);
 			} else {
 				console.error(err);
 			}

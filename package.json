@@ -12,14 +12,19 @@
   "dependencies": {
     "@types/form-data": "^2.5.0",
     "@types/mongoose": "^5.7.36",
-    "@types/node": "^14.11.2",
+    "@types/node": "^14.14.0",
+    "@types/winston": "^2.4.4",
     "axios": "^0.20.0",
-    "chokidar": "^3.4.2",
-    "discord.js": "^12.3.1",
+    "chokidar": "^3.4.3",
+    "discord.js": "^12.4.0",
     "form-data": "^3.0.0",
-    "mongoose": "^5.10.7",
-    "nodemon": "^2.0.4",
+    "mongoose": "^5.10.9",
+    "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "pm2": "^4.5.0"
   }
 }
