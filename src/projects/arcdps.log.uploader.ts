@@ -5,6 +5,7 @@ import fs from 'fs';
 const axios = require('axios').default;
 import * as config from '../../config/config.json';
 import boss from '../resources/bossmap';
+import { arcDpsLogLogger, infoLogger } from '../adapter/winston.adapter';
 
 function timeFormatter(time: number): string {
 	let formattedTime: string = '';
@@ -48,15 +49,16 @@ function uploaderFunction(client: any) {
 				)
 				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`)
 				.setTimestamp();
+			arcDpsLogLogger.info(`Log was successfully uploaded for Boss: ${fightname} by user ${metaData.data.recordedBy || 'Unknown'}`);
 			client.channels.cache.get(logChannelId).send(embed);
 		} catch (err: any) {
 			if (err.response.status === 403 && err.response.data.error === 'Encounter is too short for a useful report to be made') {
-				console.log(err.response.data.error);
+				arcDpsLogLogger.error(`Log was not uploaded because ${err.response.data.error}`);
 				return;
 			} else if (err.response.status === 523) {
-				console.log(`Cloudflare Error, try later. ${path}`);
+				arcDpsLogLogger.error(`Upload failed due to Cloudflare error ${path}`);
 			} else {
-				console.error(err);
+				arcDpsLogLogger.error(err);
 			}
 		}
 	});
