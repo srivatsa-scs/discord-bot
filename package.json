@@ -10,22 +10,18 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@types/form-data": "^2.5.0",
+		"@types/mongoose": "^5.7.36",
+		"@types/node": "^14.14.6",
+		"@types/winston": "^2.4.4",
 		"axios": "^0.20.0",
 		"chokidar": "^3.4.3",
 		"discord.js": "^12.4.1",
 		"form-data": "^3.0.0",
 		"mongoose": "^5.10.11",
-		"systeminformation": ">=4.27.11",
+		"nodemon": "^2.0.6",
 		"ts-node": "^9.0.0",
 		"typescript": "^4.0.5",
 		"winston": "^3.3.3"
-	},
-	"devDependencies": {
-		"pm2": "^4.5.0",
-		"nodemon": "^2.0.6",
-		"@types/form-data": "^2.5.0",
-		"@types/mongoose": "^5.7.36",
-		"@types/node": "^14.14.6",
-		"@types/winston": "^2.4.4"
 	}
 }

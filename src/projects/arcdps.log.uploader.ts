@@ -28,7 +28,7 @@ function uploaderFunction(client: any) {
 
 	const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
 
-	watcher.on('add', async (path) => {
+	watcher.on('add', async (path: any) => {
 		let form = FormData();
 		form.append('file', fs.createReadStream(path));
 

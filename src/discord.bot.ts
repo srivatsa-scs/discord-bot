@@ -6,16 +6,14 @@ const reactionCollector = require('./projects/reaction.collector');
 const uploaderFunction = require('./projects/arcdps.log.uploader');
 const { prefix } = require('../config/config.json');
 
-const client: any = new Discord.Client();
+let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
-
 const cooldowns = new Discord.Collection();
-
 client.once('ready', async () => {
 	let nowDate: Date = new Date();
 	console.log(` * [${nowDate}] Connected to Discord`);
