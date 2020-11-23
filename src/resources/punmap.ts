@@ -8,4 +8,5 @@ puns.set(5, `How do I go about making awesome puns? As with anything you get sta
 puns.set(6, `You can count me to make puns, I'm very depundadable.`);
 puns.set(7, `What do you call a Jalapeno whose seeds have been removed? A Hollow-peno`);
 puns.set(9, `If a naughty kid makes a sausage, is it called a Bratwurst?`);
+puns.set(10, `How do you determine a pig's colour? You check it's Pigment`);
 export default puns;
