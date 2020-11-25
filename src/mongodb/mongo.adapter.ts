@@ -6,6 +6,7 @@ import UserModel from './user.model';
 mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, (err: any) => {
 	if (err) {
 		console.log('Failed to connect to Database');
+		console.log(err);
 	} else {
 		let nowDate: Date = new Date();
 		console.log(` * [${nowDate}] Connected to Database`);
