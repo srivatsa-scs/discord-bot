@@ -3,5 +3,7 @@ config/config.json
 # Node Modules
 node_modules/
 /src/commands/roster.ts
-#Logs
+# Logs
 logs/
+# Dist
+dist/

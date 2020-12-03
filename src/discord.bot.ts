@@ -1,21 +1,32 @@
 import * as Discord from 'discord.js';
-import config from '../config/config.json';
-import fs from 'fs';
+const config = require('../config/config.json');
+import * as fs from 'fs';
+import { connect } from './mongodb/mongo.adapter';
 
 const reactionCollector = require('./projects/reaction.collector');
 const uploaderFunction = require('./projects/arcdps.log.uploader');
 const { prefix } = require('../config/config.json');
+require('dotenv').config();
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
+console.log(process.env.NODE_ENV);
+
+const commandFiles = fs
+	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
+	.filter((file) => file.endsWith(process.env.NODE_ENV == 'production' ? '.js' : '.ts'));
+
+// const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts')); // Development-ion
+// const commandFiles = fs.readdirSync('./dist/src/commands').filter((file) => file.endsWith('.js')); // Production
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 const cooldowns = new Discord.Collection();
+
 client.once('ready', async () => {
 	let nowDate: Date = new Date();
+	connect();
 	console.log(` * [${nowDate}] Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
@@ -53,7 +64,6 @@ client.on('message', (message: any) => {
 		return message.reply("I can't execute that command inside DMs!");
 	}
 	if (args[0] === '--help' || args[0] === '-h') {
-		// console.log('Enter the --help block');
 		let helpFields: Array<any> = [];
 		for (let i = 0; i < command.usage.length; i++) {
 			helpFields[i] = { name: `${prefix}${command.name} ${command.usage[i]}`, value: `${command.tooltip[i]}` };

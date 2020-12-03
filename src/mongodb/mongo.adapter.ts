@@ -3,15 +3,28 @@ import * as config from '../../config/config.json';
 import { fetchGw2AccName } from '../gw2api/find.account.name';
 import UserModel from './user.model';
 
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, (err: any) => {
-	if (err) {
-		console.log('Failed to connect to Database');
-		console.log(err);
-	} else {
+let database: mongoose.Connection;
+
+export const connect = () => {
+	mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+	database = mongoose.connection;
+
+	database.once('open', async () => {
 		let nowDate: Date = new Date();
 		console.log(` * [${nowDate}] Connected to Database`);
+	});
+
+	database.on('error', () => {
+		console.log('Error Connecting to Database');
+	});
+};
+
+export const disconnect = () => {
+	if (!database) {
+		return;
 	}
-});
+	mongoose.disconnect();
+};
 
 export function mongoDbHandler() {
 	// mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (err: any) => {
