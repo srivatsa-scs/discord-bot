@@ -1,4 +1,5 @@
 import { Client, Message } from 'discord.js';
+import { infoLogger } from '../adapter/winston.adapter';
 
 module.exports = {
 	name: 'crash',
@@ -8,6 +9,10 @@ module.exports = {
 	usage: [''],
 	tooltip: ['Replies with Pong'],
 	execute(client: Client, message: Message, args: Array<string>) {
-		throw new Error('User Defined Error');
+		try {
+			throw new Error('User Defined Error');
+		} catch (err: any) {
+			infoLogger.error(err);
+		}
 	},
 };
