@@ -44,6 +44,8 @@ module.exports = {
 			} else {
 				formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
 			}
+		} else {
+			formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });
 		}
 		const embed = new MessageEmbed()
 			.setColor('#ff0000')
