@@ -21,20 +21,13 @@ function gracefulexit() {
 	disconnect();
 	process.exit(0);
 }
-function ungracefulexit() {
-	infoLogger.info('* PLAN FAILED ABORT ABORT ABORT!!!!');
-	process.kill(process.pid);
-}
+
 process.on('SIGINT', gracefulexit); // Works on all
 process.on('SIGTERM', gracefulexit); // Non Windows only
-// process.on('SIGKILL', ungracefulexit);
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
 	.filter((file) => file.endsWith(process.env.NODE_ENV == 'production' ? '.js' : '.ts'));
-
-// const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts')); // Development-ion
-// const commandFiles = fs.readdirSync('./dist/src/commands').filter((file) => file.endsWith('.js')); // Production
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
