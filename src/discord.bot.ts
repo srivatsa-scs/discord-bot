@@ -27,7 +27,7 @@ function ungracefulexit() {
 }
 process.on('SIGINT', gracefulexit); // Works on all
 process.on('SIGTERM', gracefulexit); // Non Windows only
-process.on('SIGKILL', ungracefulexit);
+// process.on('SIGKILL', ungracefulexit);
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
