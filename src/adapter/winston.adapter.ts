@@ -12,7 +12,6 @@ export const infoLogger = createLogger({
 	transports: [
 		new transports.File({
 			filename: './logs/info.log',
-			handleExceptions: true,
 			level: 'info',
 		}),
 		new transports.File({
@@ -21,7 +20,6 @@ export const infoLogger = createLogger({
 			handleExceptions: true,
 		}),
 	],
-	exceptionHandlers: [new transports.File({ filename: './logs/exceptions.log' })],
 });
 
 const myFormatTwo = printf(({ level, message, label, timestamp }: any): string => {
@@ -35,7 +33,6 @@ export const arcDpsLogLogger = createLogger({
 	transports: [
 		new transports.File({
 			filename: './logs/dpsReportLogs.log',
-			handleExceptions: true,
 			level: 'info',
 		}),
 		new transports.Console(),

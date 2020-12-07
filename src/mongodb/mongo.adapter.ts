@@ -23,7 +23,10 @@ export const disconnect = () => {
 	if (!database) {
 		return;
 	}
+	let nowDate: Date = new Date();
 	mongoose.disconnect();
+	console.log(`* [${nowDate}] MongoDB Connection Closed`);
+	return;
 };
 
 export function mongoDbHandler() {

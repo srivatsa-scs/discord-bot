@@ -1,7 +1,8 @@
 import * as Discord from 'discord.js';
 const config = require('../config/config.json');
 import * as fs from 'fs';
-import { connect } from './mongodb/mongo.adapter';
+import { infoLogger } from './adapter/winston.adapter';
+import { connect, disconnect } from './mongodb/mongo.adapter';
 
 const reactionCollector = require('./projects/reaction.collector');
 const uploaderFunction = require('./projects/arcdps.log.uploader');
@@ -10,7 +11,23 @@ require('dotenv').config();
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-console.log(process.env.NODE_ENV);
+infoLogger.info(process.env.NODE_ENV);
+
+function gracefulexit() {
+	infoLogger.info('* Attemping to Gracefully exit...');
+	let nowDate: Date = new Date();
+	client.destroy();
+	infoLogger.info(`* [${nowDate}] Discord Client Connection Closed`);
+	disconnect();
+	process.exit(0);
+}
+function ungracefulexit() {
+	infoLogger.info('* PLAN FAILED ABORT ABORT ABORT!!!!');
+	process.kill(process.pid);
+}
+process.on('SIGINT', gracefulexit); // Works on all
+process.on('SIGTERM', gracefulexit); // Non Windows only
+process.on('SIGKILL', ungracefulexit);
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
