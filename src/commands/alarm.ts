@@ -1,4 +1,4 @@
-import { infoLogger } from '../adapter/winston.adapter';
+import { logger } from '../adapter/winston.adapter';
 
 module.exports = {
 	name: 'alarm',
@@ -48,7 +48,7 @@ module.exports = {
 			if (alarmTimeout > 43200000) {
 				return message.channel.send(`<@!${message.author.id}> max alarm time is 12h`);
 			}
-			infoLogger.info(`Alarm set by (${message.author.id}) for (${hours}h ${minutes}m ${seconds}s)`);
+			logger.info(`Alarm set by (${message.author.id}) for (${hours}h ${minutes}m ${seconds}s)`);
 			message.channel.send(`<@!${message.author.id}>, I will send you a direct message in ${hours}h ${minutes}m ${seconds}s.`);
 			let replyMessage: string = '';
 			if (args.length > 1) {
@@ -57,7 +57,7 @@ module.exports = {
 				}
 			}
 			setTimeout(() => {
-				infoLogger.info(`Alarm successfully executed for (${message.author.id})`);
+				logger.info(`Alarm successfully executed for (${message.author.id})`);
 				for (let i = 0; i < 5; i++) {
 					client.users.cache.get(message.author.id).send(`<@!${message.author.id}> ${replyMessage}`);
 				}

@@ -1,5 +1,5 @@
 import { Client, Message } from 'discord.js';
-import { infoLogger } from '../adapter/winston.adapter';
+import { logger } from '../adapter/winston.adapter';
 
 module.exports = {
 	name: 'crash',
@@ -12,7 +12,7 @@ module.exports = {
 		try {
 			throw new Error('User Defined Error');
 		} catch (err: any) {
-			infoLogger.error(err);
+			logger.error(err);
 		}
 	},
 };

@@ -5,7 +5,7 @@ import fs from 'fs';
 const axios = require('axios').default;
 import * as config from '../../config/config.json';
 import boss from '../resources/bossmap';
-import { arcDpsLogLogger, infoLogger } from '../adapter/winston.adapter';
+import { arcDpsLogLogger, logger } from '../adapter/winston.adapter';
 
 function timeFormatter(time: number): string {
 	let formattedTime: string = '';
@@ -23,11 +23,12 @@ function timeFormatter(time: number): string {
 function uploaderFunction(client: any) {
 	const logChannelId: string = config.LOG_CHANNEL_ID;
 	const logPath: string = `${config.DPS_REPORT_FILES}**/*.${config.ARC_DPS_LOG_FILE_EXTENSION}`;
+
 	const uploadUrl: string = `https://dps.report/uploadContent?json=1&generator=ei&userToken=${config.DPS_REPORT_USER_TOKEN}`;
 	const metaDataUrl: string = `https://dps.report/getJson?permalink=`;
 
 	const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
-
+	logger.info('Initializing File Watcher');
 	watcher.on('add', async (path: any) => {
 		let form = FormData();
 		form.append('file', fs.createReadStream(path));

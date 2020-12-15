@@ -1,7 +1,7 @@
 import * as Discord from 'discord.js';
 const config = require('../config/config.json');
 import * as fs from 'fs';
-import { infoLogger } from './adapter/winston.adapter';
+import { logger } from './adapter/winston.adapter';
 import { connect, disconnect } from './mongodb/mongo.adapter';
 
 const reactionCollector = require('./projects/reaction.collector');
@@ -11,14 +11,15 @@ require('dotenv').config();
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-infoLogger.info(process.env.NODE_ENV);
+logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
-function gracefulexit() {
-	infoLogger.info('* Attemping to Gracefully exit...');
-	let nowDate: Date = new Date();
+async function gracefulexit() {
+	logger.info('Attemping to Gracefully exit...');
+	// let nowDate: Date = new Date();
 	client.destroy();
-	infoLogger.info(`* [${nowDate}] Discord Client Connection Closed`);
-	disconnect();
+	logger.info(`Discord Client Connection Closed`);
+	await disconnect();
+	logger.info(`MongoDB Connection Closed`);
 	process.exit(0);
 }
 
@@ -35,13 +36,13 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', async () => {
-	let nowDate: Date = new Date();
 	connect();
-	console.log(` * [${nowDate}] Connected to Discord`);
+	logger.info(`Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
 	client.user.setActivity('!command --help');
 });
+
 client.login(config.token);
 
 client.on('message', (message: any) => {
@@ -95,7 +96,15 @@ client.on('message', (message: any) => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	} catch (err: any) {
-		console.error(err);
-		message.reply('Error!');
+		logger.error(err);
+		message.reply('An error occoured, this is a unhelpful error message.');
 	}
+});
+
+client.on('error', (err: Error) => {
+	logger.error(err);
+});
+
+client.on('warn', (info: string) => {
+	logger.info(info);
 });

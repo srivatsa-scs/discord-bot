@@ -10,7 +10,7 @@ module.exports = (client: any) => {
 	firstMessage(client, channelId, emojiText, reactions);
 
 	const handleReaction = (reaction: any, user: any, add: boolean) => {
-		if (user.id === config.DISCORD_BOT_USER_ID) return;
+		if (user.id === config.DISCORD_BOT_CLIENT_ID) return;
 		const emoji = reaction._emoji.name;
 		const { guild } = reaction.message;
 		const roleId = config.CUSTOM_ROLE_ID;

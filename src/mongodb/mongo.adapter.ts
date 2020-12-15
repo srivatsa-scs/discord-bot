@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import * as config from '../../config/config.json';
 import { fetchGw2AccName } from '../gw2api/find.account.name';
 import UserModel from './user.model';
+import { logger } from '../adapter/winston.adapter';
 
 let database: mongoose.Connection;
 
@@ -10,23 +11,20 @@ export const connect = () => {
 	database = mongoose.connection;
 
 	database.once('open', async () => {
-		let nowDate: Date = new Date();
-		console.log(` * [${nowDate}] Connected to Database`);
+		logger.info(`Connected to MongoDB`);
 	});
 
-	database.on('error', () => {
-		console.log('Error Connecting to Database');
+	database.on('error', (err: any) => {
+		logger.info('Error Connecting to Database');
+		logger.error(err);
 	});
 };
 
-export const disconnect = () => {
+export const disconnect = async () => {
 	if (!database) {
 		return;
 	}
-	let nowDate: Date = new Date();
-	mongoose.disconnect();
-	console.log(`* [${nowDate}] MongoDB Connection Closed`);
-	return;
+	return mongoose.disconnect();
 };
 
 export function mongoDbHandler() {

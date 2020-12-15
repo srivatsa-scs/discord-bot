@@ -26,12 +26,12 @@ module.exports = async (client: Client, id: string, text: string, reactions: Arr
 		// If the channel is empty, send a new message
 		const resp = await channel.send(text);
 		addReactions(resp, reactions);
-	} else if (firstMessage.author.id != config.DISCORD_BOT_USER_ID) {
+	} else if (firstMessage.author.id != config.DISCORD_BOT_CLIENT_ID) {
 		// If the channel is not empty and the first message is not by the bot, do nothing basically
 		console.log('First message not created by bot');
-	} else if (firstMessage.author.id == config.DISCORD_BOT_USER_ID) {
+	} else if (firstMessage.author.id == config.DISCORD_BOT_CLIENT_ID) {
 		// If the channel is not empty and the first message is by the bot, edit to say whatever you want.
 		messages.get(messageArray[0]).edit(text);
 		addReactions(messages.last(), reactions);
-	} // That's all folks. // Explanation since you muted.
+	}
 };
