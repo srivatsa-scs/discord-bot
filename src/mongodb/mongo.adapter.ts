@@ -6,7 +6,7 @@ import { logger } from '../adapter/winston.adapter';
 
 let database: mongoose.Connection;
 
-export const connect = () => {
+export async function connectDB() {
 	mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 	database = mongoose.connection;
 
@@ -18,25 +18,18 @@ export const connect = () => {
 		logger.info('Error Connecting to Database');
 		logger.error(err);
 	});
-};
+}
 
-export const disconnect = async () => {
+export async function disconnectDB() {
 	if (!database) {
 		return;
 	}
-	return mongoose.disconnect();
-};
+	await mongoose.disconnect();
+	logger.info('MongoDB connection Closed.');
+	return 0;
+}
 
 export function mongoDbHandler() {
-	// mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (err: any) => {
-	// 	if (err) {
-	// 		console.log('Failed to connect to Database');
-	// 	} else {
-	// 		let nowDate: Date = new Date();
-	// 		console.log(` * [${nowDate}] Connected to Database`);
-	// 	}
-	// });
-
 	let user = new UserModel({ discord: config.DISCORD_USER_ID, gw2ApiKey: [{ accName: config.GW2_ACC_NAME, apiKey: config.GW2_API_KEY }] });
 	UserModel.findOne({ discord: config.DISCORD_USER_ID }, async (err: any, docs: any) => {
 		if (err) console.log('Error');

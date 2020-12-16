@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 const config = require('../config/config.json');
 import * as fs from 'fs';
 import { logger } from './adapter/winston.adapter';
-import { connect, disconnect } from './mongodb/mongo.adapter';
+import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
 
 require('dotenv').config();
 logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
@@ -14,23 +14,34 @@ const { prefix } = require('../config/config.json');
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 
-async function gracefulExit() {
+async function gracefulExit(sig: string) {
+	logger.info(`Recieved ${sig}`);
 	logger.info('Attemping to Gracefully exit...');
 	try {
 		await closeFileWatcher();
 		logger.info('My watch has ended.');
 		client.destroy();
 		logger.info(`Discord Client Connection Closed.`);
-		await disconnect();
-		logger.info(`MongoDB Connection Closed.`);
-		process.exit(0);
+		await disconnectDB();
 	} catch (err: any) {
 		logger.error(err);
+		logger.info('Exiting with code: 1');
+		process.exit(1);
+	} finally {
+		logger.info('Exiting with code: 0');
+		process.exit(0);
 	}
 }
 
-process.on('SIGINT', gracefulExit); // Works on all
-process.on('SIGTERM', gracefulExit); // Non Windows only
+// Works with all
+process.on('SIGINT', (signal: string) => {
+	gracefulExit(signal);
+});
+
+// Non windows
+process.on('SIGTERM', (signal: string) => {
+	gracefulExit(signal);
+}); // Non Windows only
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
@@ -42,7 +53,7 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', async () => {
-	connect();
+	connectDB();
 	logger.info(`Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
