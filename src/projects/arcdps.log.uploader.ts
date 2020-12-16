@@ -20,15 +20,20 @@ function timeFormatter(time: number): string {
 	return formattedTime;
 }
 
-function uploaderFunction(client: any) {
+const logPath: string = `${config.DPS_REPORT_FILES}**/*.${config.ARC_DPS_LOG_FILE_EXTENSION}`;
+const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
+logger.info('Initializing File Watcher');
+
+export async function closeFileWatcher() {
+	return watcher.close();
+}
+
+export function uploaderFunction(client: any) {
 	const logChannelId: string = config.LOG_CHANNEL_ID;
-	const logPath: string = `${config.DPS_REPORT_FILES}**/*.${config.ARC_DPS_LOG_FILE_EXTENSION}`;
 
 	const uploadUrl: string = `https://dps.report/uploadContent?json=1&generator=ei&userToken=${config.DPS_REPORT_USER_TOKEN}`;
 	const metaDataUrl: string = `https://dps.report/getJson?permalink=`;
 
-	const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
-	logger.info('Initializing File Watcher');
 	watcher.on('add', async (path: any) => {
 		let form = FormData();
 		form.append('file', fs.createReadStream(path));
@@ -64,5 +69,3 @@ function uploaderFunction(client: any) {
 		}
 	});
 }
-
-module.exports = uploaderFunction;

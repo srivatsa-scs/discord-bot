@@ -4,27 +4,33 @@ import * as fs from 'fs';
 import { logger } from './adapter/winston.adapter';
 import { connect, disconnect } from './mongodb/mongo.adapter';
 
-const reactionCollector = require('./projects/reaction.collector');
-const uploaderFunction = require('./projects/arcdps.log.uploader');
-const { prefix } = require('../config/config.json');
 require('dotenv').config();
+logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
+
+const reactionCollector = require('./projects/reaction.collector');
+import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
+const { prefix } = require('../config/config.json');
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
-async function gracefulexit() {
+async function gracefulExit() {
 	logger.info('Attemping to Gracefully exit...');
-	// let nowDate: Date = new Date();
-	client.destroy();
-	logger.info(`Discord Client Connection Closed`);
-	await disconnect();
-	logger.info(`MongoDB Connection Closed`);
-	process.exit(0);
+	try {
+		await closeFileWatcher();
+		logger.info('My watch has ended.');
+		client.destroy();
+		logger.info(`Discord Client Connection Closed.`);
+		await disconnect();
+		logger.info(`MongoDB Connection Closed.`);
+		process.exit(0);
+	} catch (err: any) {
+		logger.error(err);
+	}
 }
 
-process.on('SIGINT', gracefulexit); // Works on all
-process.on('SIGTERM', gracefulexit); // Non Windows only
+process.on('SIGINT', gracefulExit); // Works on all
+process.on('SIGTERM', gracefulExit); // Non Windows only
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
@@ -43,7 +49,12 @@ client.once('ready', async () => {
 	client.user.setActivity('!command --help');
 });
 
-client.login(config.token);
+try {
+	client.login(config.token);
+} catch (err: any) {
+	logger.error('Failed to connect to discord');
+	logger.error(err);
+}
 
 client.on('message', (message: any) => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -67,7 +78,7 @@ client.on('message', (message: any) => {
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			return message.reply(`Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 		}
 	}
 	/* Channel only or Not*/
