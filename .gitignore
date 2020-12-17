@@ -7,3 +7,6 @@ node_modules/
 logs/
 # Dist
 dist/
+# Docker files
+discordbot.dockerfile
+docker-compose.yml

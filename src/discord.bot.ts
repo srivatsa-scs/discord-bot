@@ -5,7 +5,7 @@ import { logger } from './adapter/winston.adapter';
 import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
 
 require('dotenv').config();
-logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
+logger.info(`ENV: ${process.env.NODE_ENV} | OS: ${process.platform} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
 const reactionCollector = require('./projects/reaction.collector');
 import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
