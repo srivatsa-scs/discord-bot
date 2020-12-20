@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-dotenv.config({ path: `${process.cwd()}/../.env` });
+dotenv.config({ path: `${process.cwd()}/.env` });
 import { logger } from "./logger/log4js.adapter";
 import { shutdown } from "log4js";
 logger.info(
@@ -16,7 +16,7 @@ import { prefix } from "../config/config.json";
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-// move this to file
+// move this to a file
 async function gracefulExit(sig: string, code: number = 0) {
   logger.info(`Recieved ${sig}`);
   logger.info("Attemping to gracefully exit...");
@@ -73,7 +73,7 @@ process.on("exit", (code) => {
 });
 
 const commandFiles = fs
-  .readdirSync(process.env.NODE_ENV == "production" ? "../dist/commands" : "./commands")
+  .readdirSync(process.env.NODE_ENV == "production" ? "./dist/commands" : "./src/commands")
   .filter((file) => file.endsWith(process.env.NODE_ENV == "production" ? ".js" : ".ts"));
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);

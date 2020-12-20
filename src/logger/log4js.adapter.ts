@@ -5,7 +5,7 @@ function configureLogger(format: string, isEnableCallStack: boolean) {
     appenders: {
       main: {
         type: "file",
-        filename: "../logs/main.log",
+        filename: "./logs/main.log",
         layout: {
           type: "pattern",
           pattern: format,
@@ -13,7 +13,7 @@ function configureLogger(format: string, isEnableCallStack: boolean) {
       },
       arcDpsUploader: {
         type: "file",
-        filename: "../logs/dpsReportLogs.log",
+        filename: "./logs/dpsReportLogs.log",
       },
       console: {
         type: "stdout",
