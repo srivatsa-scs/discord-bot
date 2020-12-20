@@ -1,12 +1,12 @@
-import config from "../../config/config.json";
-import { logger } from "../logger/log4js.adapter";
-const firstMessage = require("./first.message");
+import config from '../../config/config.json';
+import { logger } from '../logger/log4js.adapter';
+const firstMessage = require('./first.message');
 
 module.exports = (client: any) => {
   const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;
-  const reactions = ["✅"]; // Add additional options here
+  const reactions = ['✅']; // Add additional options here
 
-  let emojiText = "Add reaction to sign up for this weeks raid\n";
+  let emojiText = 'Add reaction to sign up for this weeks raid\n';
   emojiText += `✅ = Sign Up\n`; // Text
 
   firstMessage(client, channelId, emojiText, reactions);
@@ -23,13 +23,13 @@ module.exports = (client: any) => {
     } else member.roles.remove(roleId);
   };
 
-  client.on("messageReactionAdd", (reaction: any, user: any) => {
+  client.on('messageReactionAdd', (reaction: any, user: any) => {
     if (reaction.message.channel.id === channelId) {
       handleReaction(reaction, user, true);
     }
   });
 
-  client.on("messageReactionRemove", (reaction: any, user: any) => {
+  client.on('messageReactionRemove', (reaction: any, user: any) => {
     if (reaction.message.channel.id === channelId) {
       handleReaction(reaction, user, false);
     }

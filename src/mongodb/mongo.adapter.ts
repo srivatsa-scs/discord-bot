@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import * as config from "../../config/config.json";
-import { fetchGw2AccName } from "../gw2api/find.account.name";
-import UserModel from "./user.model";
-import { logger } from "../logger/log4js.adapter";
+import mongoose from 'mongoose';
+import * as config from '../../config/config.json';
+import { fetchGw2AccName } from '../gw2api/find.account.name';
+import UserModel from './user.model';
+import { logger } from '../logger/log4js.adapter';
 
 let database: mongoose.Connection;
 
@@ -15,36 +15,36 @@ export async function connectDB() {
 
   database = mongoose.connection;
 
-  database.on("connecting", () => {
+  database.on('connecting', () => {
     logger.debug(`Initiated connection to MongoDB`);
   });
 
-  database.on("disconnecting", () => {
+  database.on('disconnecting', () => {
     logger.debug(`Initiated disconnection from MongoDB`);
   });
 
-  database.on("connected", () => {
+  database.on('connected', () => {
     logger.info(`MongoDB Connected`);
   });
 
-  database.on("error", (err: any) => {
-    logger.info("Error Connecting to Database");
+  database.on('error', (err: any) => {
+    logger.info('Error Connecting to Database');
     logger.error(err);
   });
 
-  database.on("disconnected", () => {
+  database.on('disconnected', () => {
     logger.info(`Mongoose lost connection to the database server`);
   });
 
-  database.on("close", () => {
+  database.on('close', () => {
     logger.info(`MongoDB connection closed`);
   });
 
-  database.on("reconnected", () => {
+  database.on('reconnected', () => {
     logger.info(`MongoDB reconnected`);
   });
 
-  database.on("reconnected", () => {
+  database.on('reconnected', () => {
     logger.error(`MongoDB reconnect failed`);
   });
 }
@@ -65,12 +65,12 @@ export function mongoDbHandler() {
     if (err) logger.error(err);
     else {
       if (docs) {
-        logger.info("User already exists");
+        logger.info('User already exists');
       } else {
         // Validate if the key has all the required perms
         user.save((err: any, reg: any) => {
           if (err) {
-            logger.error("Error when saving:" + err);
+            logger.error('Error when saving:' + err);
           } else {
             logger.info(`User saved with id ${reg.id}`);
           }
@@ -90,27 +90,27 @@ export async function findAllApiKeys(discordUserId: string): Promise<any> {
     } else return [];
   } catch (err) {
     logger.error(err);
-    return { error: "An error occoured when checking the database." };
+    return { error: 'An error occoured when checking the database.' };
   }
 }
 
 export async function getAccInfo(apiKey: string, discordUserId: string): Promise<string> {
   try {
-    const resp = await UserModel.findOne({ discord: discordUserId }, "gw2").exec();
+    const resp = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
     if (resp) {
       logger.info(resp);
     }
   } catch (err) {
-    logger.error("Error occoured with Database");
+    logger.error('Error occoured with Database');
   }
-  return "";
+  return '';
 }
 
 export async function insertApiKey(apiKey: string, discordUserId: string): Promise<number> {
   try {
-    const resp: any = await UserModel.findOne({ discord: discordUserId }, "gw2").exec();
+    const resp: any = await UserModel.findOne({ discord: discordUserId }, 'gw2').exec();
     if (resp) {
-      logger.debug("Discord user already exists");
+      logger.debug('Discord user already exists');
       let accAlreadyExists: boolean = false;
 
       /* Check to see if the API key is present in the database */
@@ -121,9 +121,9 @@ export async function insertApiKey(apiKey: string, discordUserId: string): Promi
         }
       }
       if (!accAlreadyExists) {
-        logger.debug("Account does not exist");
+        logger.debug('Account does not exist');
         const accName: string = await fetchGw2AccName(apiKey);
-        if (accName === "") {
+        if (accName === '') {
           return 5;
         } else {
           const dbResp = await UserModel.updateOne(
@@ -135,12 +135,12 @@ export async function insertApiKey(apiKey: string, discordUserId: string): Promi
             }
           );
           if (dbResp.ok === 1) {
-            logger.debug("New API Key has been added");
+            logger.debug('New API Key has been added');
             return 0;
           } else return 5;
         }
       } else {
-        logger.info("API key already exists");
+        logger.info('API key already exists');
         return 2;
       }
     } else {

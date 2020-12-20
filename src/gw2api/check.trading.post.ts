@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
-const tradingPostUrl: string = "https://api.guildwars2.com/v2/commerce/delivery";
-const itemUrl: string = "https://api.guildwars2.com/v2/items/";
+const tradingPostUrl: string = 'https://api.guildwars2.com/v2/commerce/delivery';
+const itemUrl: string = 'https://api.guildwars2.com/v2/items/';
 
 async function _getMetaData(id: number) {
   const resp: any = await axios.get(`${itemUrl}${id}`);

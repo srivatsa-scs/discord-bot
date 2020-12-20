@@ -1,27 +1,27 @@
-import "dotenv/config";
-import { logger } from "./logger/log4js.adapter";
-import { shutdown } from "log4js";
+import 'dotenv/config';
+import { logger } from './logger/log4js.adapter';
+import { shutdown } from 'log4js';
 logger.info(
   `ENV: ${process.env.NODE_ENV} | OS: ${process.platform} | PID: ${process.pid} | ARCH: ${process.arch} | LOG_LEVEL:${process.env.LOG_LEVEL}`
 );
-import * as Discord from "discord.js";
-import config from "../config/config.json";
-import * as fs from "fs";
+import * as Discord from 'discord.js';
+import config from '../config/config.json';
+import * as fs from 'fs';
 
-import { connectDB, disconnectDB } from "./mongodb/mongo.adapter";
-const reactionCollector = require("./projects/reaction.collector");
-import { uploaderFunction, closeFileWatcher } from "./projects/arcdps.log.uploader";
-import { prefix } from "../config/config.json";
+import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
+const reactionCollector = require('./projects/reaction.collector');
+import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
+import { prefix } from '../config/config.json';
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 // move this to a file
 async function gracefulExit(sig: string, code: number = 0) {
   logger.info(`Recieved ${sig}`);
-  logger.info("Attemping to gracefully exit...");
+  logger.info('Attemping to gracefully exit...');
   try {
     await closeFileWatcher();
-    logger.info("My watch has ended.");
+    logger.info('My watch has ended.');
     client.destroy();
     logger.info(`Discord Client Connection Closed.`);
     await disconnectDB();
@@ -43,27 +43,27 @@ async function gracefulExit(sig: string, code: number = 0) {
   }
 }
 
-const sigs = ["SIGINT", "SIGTERM"];
+const sigs = ['SIGINT', 'SIGTERM'];
 sigs.forEach((sig) => {
   process.on(sig, async () => {
     await gracefulExit(sig);
   });
 });
 
-client.on("error", (err: Error) => {
+client.on('error', (err: Error) => {
   logger.error(err);
 });
 
-client.on("warn", (info: string) => {
+client.on('warn', (info: string) => {
   logger.warn(info);
 });
 
-process.on("uncaughtException", (error) => {
+process.on('uncaughtException', (error) => {
   logger.error(error);
   // gracefulExit("SIGTERM", 1);
 });
 
-process.on("exit", (code) => {
+process.on('exit', (code) => {
   if (code !== 0) {
     console.error(`There was errors while trying to graceflly exit, process.exit was called with code : ${code}`);
   } else {
@@ -72,30 +72,30 @@ process.on("exit", (code) => {
 });
 
 const commandFiles = fs
-  .readdirSync(process.env.NODE_ENV == "production" ? "./dist/commands" : "./src/commands")
-  .filter((file) => file.endsWith(process.env.NODE_ENV == "production" ? ".js" : ".ts"));
+  .readdirSync(process.env.NODE_ENV == 'production' ? './dist/commands' : './src/commands')
+  .filter((file) => file.endsWith(process.env.NODE_ENV == 'production' ? '.js' : '.ts'));
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);
 }
 const cooldowns = new Discord.Collection();
 
-client.once("ready", async () => {
+client.once('ready', async () => {
   connectDB();
   logger.info(`Discord Connected`);
   reactionCollector(client);
   uploaderFunction(client);
-  client.user.setActivity("!command --help");
+  client.user.setActivity('!command --help');
 });
 
 try {
   client.login(config.token);
 } catch (err: any) {
-  logger.error("Failed to connect to discord");
+  logger.error('Failed to connect to discord');
   logger.error(err);
 }
 
-client.on("message", (message: any) => {
+client.on('message', (message: any) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -123,10 +123,10 @@ client.on("message", (message: any) => {
     }
   }
   /* Channel only or Not*/
-  if (command.guildOnly && message.channel.type === "dm") {
+  if (command.guildOnly && message.channel.type === 'dm') {
     return message.reply("I can't execute that command inside DMs!");
   }
-  if (args[0] === "--help" || args[0] === "-h") {
+  if (args[0] === '--help' || args[0] === '-h') {
     let helpFields: Array<any> = [];
     for (let i = 0; i < command.usage.length; i++) {
       helpFields[i] = {
@@ -135,7 +135,7 @@ client.on("message", (message: any) => {
       };
     }
     const responseEmbed = new Discord.MessageEmbed()
-      .setColor("77ffff")
+      .setColor('77ffff')
       .setTitle(`${prefix}${command.name} Help`)
       .addFields(helpFields)
       .setTimestamp();
@@ -156,6 +156,6 @@ client.on("message", (message: any) => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
   } catch (err: any) {
     logger.error(err);
-    message.reply("An error occoured, this is a unhelpful error message.");
+    message.reply('An error occoured, this is a unhelpful error message.');
   }
 });

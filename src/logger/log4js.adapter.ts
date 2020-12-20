@@ -1,57 +1,57 @@
-import { configure, getLogger } from "log4js";
+import { configure, getLogger } from 'log4js';
 
 function configureLogger(format: string, isEnableCallStack: boolean) {
   const logConfig = {
     appenders: {
       main: {
-        type: "file",
-        filename: "./logs/main.log",
+        type: 'file',
+        filename: './logs/main.log',
         layout: {
-          type: "pattern",
+          type: 'pattern',
           pattern: format,
         },
       },
       arcDpsUploader: {
-        type: "file",
-        filename: "./logs/dpsReportLogs.log",
+        type: 'file',
+        filename: './logs/dpsReportLogs.log',
       },
       console: {
-        type: "stdout",
+        type: 'stdout',
         layout: {
-          type: "pattern",
+          type: 'pattern',
           pattern: format,
         },
       },
     },
     categories: {
       main: {
-        appenders: ["main", "console"],
-        level: "info",
+        appenders: ['main', 'console'],
+        level: 'info',
         enableCallStack: isEnableCallStack,
       },
       arcDpsUploader: {
-        appenders: ["arcDpsUploader", "console"],
-        level: "info",
+        appenders: ['arcDpsUploader', 'console'],
+        level: 'info',
       },
-      default: { appenders: ["console"], level: "info" },
+      default: { appenders: ['console'], level: 'info' },
     },
   };
   return configure(logConfig);
 }
 
 switch (process.env.LOG_LEVEL?.toLowerCase()) {
-  case "trace":
-    configureLogger("%[[ %d{yyyy-mm-dd} %r | %c | PID:%z on %h | %p ]%] - %m%n%s", true);
+  case 'trace':
+    configureLogger('%[[ %d{yyyy-mm-dd} %r | %c | PID:%z on %h | %p ]%] - %m%n%s', true);
     break;
-  case "debug":
-    configureLogger("%[[ %d{yyyy-mm-dd} %r | %c | PID:%z on %h | %f:%l:%o | %p ]%] - %m", true);
+  case 'debug':
+    configureLogger('%[[ %d{yyyy-mm-dd} %r | %c | PID:%z on %h | %f:%l:%o | %p ]%] - %m', true);
     break;
   default:
-    configureLogger("%[[ %d{yyyy-mm-dd} %r | %c | %p ]%] - %m", false);
+    configureLogger('%[[ %d{yyyy-mm-dd} %r | %c | %p ]%] - %m', false);
 }
 
-export const logger = getLogger("main");
-export const arcDpsLogLogger = getLogger("arcDpsUploader");
+export const logger = getLogger('main');
+export const arcDpsLogLogger = getLogger('arcDpsUploader');
 //export const shutdownLogger = shutdown();
 //Set log level to respect .env setting
 logger.level = `${process.env.LOG_LEVEL}`;
