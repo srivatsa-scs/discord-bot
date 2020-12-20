@@ -51,7 +51,7 @@ switch (process.env.LOG_LEVEL?.toLowerCase()) {
 }
 
 export const logger = getLogger("main");
-export const arcDpsLogLogger = getLogger("uploader");
+export const arcDpsLogLogger = getLogger("arcDpsUploader");
 //export const shutdownLogger = shutdown();
 //Set log level to respect .env setting
 logger.level = `${process.env.LOG_LEVEL}`;

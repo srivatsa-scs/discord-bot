@@ -54,7 +54,7 @@ export async function disconnectDB() {
   if (!database) {
     return;
   }
-  return await mongoose.disconnect();
+  return mongoose.disconnect();
 }
 
 export function mongoDbHandler() {

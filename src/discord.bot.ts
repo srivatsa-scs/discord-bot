@@ -29,13 +29,12 @@ async function gracefulExit(sig: string, code: number = 0) {
   } catch (err: any) {
     code = 1;
     logger.error(err);
-    logger.info(`Exiting with code: ${code}`);
   } finally {
     logger.info(`Exiting with code: ${code}`);
     shutdown((error: any) => {
       if (error) {
         code = 2;
-        console.error(error);
+        console.error(`errors were encountered while closing the logger\n${error}`);
       }
       setImmediate(() => {
         process.exit(code);
@@ -68,7 +67,7 @@ process.on("exit", (code) => {
   if (code !== 0) {
     console.error(`There was errors while trying to graceflly exit, process.exit was called with code : ${code}`);
   } else {
-    console.info(`----- Exiting the end process with code : ${code} -----`);
+    console.info(`----- { Exiting the end process with code : ${code} } -----`);
   }
 });
 
