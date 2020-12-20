@@ -1,13 +1,13 @@
-import { logger } from "../logger/log4js.adapter";
+import { logger } from '../logger/log4js.adapter';
 
 module.exports = {
-  name: "alarm",
-  description: "It sets an alarm!",
+  name: 'alarm',
+  description: 'It sets an alarm!',
   cooldown: 5,
   args: true,
   guildOnly: true,
-  usage: ["<time> <message>"],
-  tooltip: ["You can set an reminder for upto 12h with an optional message."],
+  usage: ['<time> <message>'],
+  tooltip: ['You can set an reminder for upto 12h with an optional message.'],
   execute(client: any, message: any, args: any) {
     if (args[0]) {
       let alarmTimeout = 1000;
@@ -54,7 +54,7 @@ module.exports = {
       message.channel.send(
         `<@!${message.author.id}>, I will send you a direct message in ${hours}h ${minutes}m ${seconds}s.`
       );
-      let replyMessage: string = "";
+      let replyMessage: string = '';
       if (args.length > 1) {
         for (let i = 1; i < args.length; i++) {
           replyMessage += `${args[i]} `;
