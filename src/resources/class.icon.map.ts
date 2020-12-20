@@ -2,10 +2,16 @@ let classMap = new Map();
 // Warrior
 classMap.set('00', { color: '#F8C300', url: 'https://wiki.guildwars2.com/images/d/db/Warrior_tango_icon_200px.png' });
 classMap.set('01', { color: '#F8C300', url: 'https://wiki.guildwars2.com/images/8/80/Berserker_tango_icon_200px.png' });
-classMap.set('02', { color: '#F8C300', url: 'https://wiki.guildwars2.com/images/7/78/Spellbreaker_tango_icon_200px.png' });
+classMap.set('02', {
+  color: '#F8C300',
+  url: 'https://wiki.guildwars2.com/images/7/78/Spellbreaker_tango_icon_200px.png',
+});
 
 classMap.set('10', { color: '#0099E1', url: 'https://wiki.guildwars2.com/images/6/6c/Guardian_tango_icon_200px.png' });
-classMap.set('11', { color: '#0099E1', url: 'https://wiki.guildwars2.com/images/1/1f/Dragonhunter_tango_icon_200px.png' });
+classMap.set('11', {
+  color: '#0099E1',
+  url: 'https://wiki.guildwars2.com/images/1/1f/Dragonhunter_tango_icon_200px.png',
+});
 classMap.set('12', { color: '#0099E1', url: 'https://wiki.guildwars2.com/images/7/73/Firebrand_tango_icon_200px.png' });
 
 classMap.set('20', { color: '#A62019', url: 'https://wiki.guildwars2.com/images/a/a8/Revenant_tango_icon_200px.png' });
@@ -24,15 +30,24 @@ classMap.set('50', { color: '#F93A2F', url: 'https://wiki.guildwars2.com/images/
 classMap.set('51', { color: '#F93A2F', url: 'https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png' });
 classMap.set('52', { color: '#F93A2F', url: 'https://wiki.guildwars2.com/images/a/ae/Holosmith_tango_icon_200px.png' });
 
-classMap.set('60', { color: '#C93718', url: 'https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png' });
+classMap.set('60', {
+  color: '#C93718',
+  url: 'https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png',
+});
 classMap.set('61', { color: '#C93718', url: 'https://wiki.guildwars2.com/images/9/90/Tempest_tango_icon_200px.png' });
 classMap.set('62', { color: '#C93718', url: 'https://wiki.guildwars2.com/images/3/31/Weaver_tango_icon_200px.png' });
 
 classMap.set('70', { color: '#A652BB', url: 'https://wiki.guildwars2.com/images/7/73/Mesmer_tango_icon_200px.png' });
-classMap.set('71', { color: '#A652BB', url: 'https://wiki.guildwars2.com/images/8/8b/Chronomancer_tango_icon_200px.png' });
+classMap.set('71', {
+  color: '#A652BB',
+  url: 'https://wiki.guildwars2.com/images/8/8b/Chronomancer_tango_icon_200px.png',
+});
 classMap.set('72', { color: '#A652BB', url: 'https://wiki.guildwars2.com/images/a/a9/Mirage_tango_icon_200px.png' });
 
-classMap.set('80', { color: '#008369', url: 'https://wiki.guildwars2.com/images/c/cd/Necromancer_tango_icon_200px.png' });
+classMap.set('80', {
+  color: '#008369',
+  url: 'https://wiki.guildwars2.com/images/c/cd/Necromancer_tango_icon_200px.png',
+});
 classMap.set('81', { color: '#008369', url: 'https://wiki.guildwars2.com/images/9/95/Reaper_tango_icon_200px.png' });
 classMap.set('82', { color: '#008369', url: 'https://wiki.guildwars2.com/images/8/8a/Scourge_tango_icon_200px.png' });
 
