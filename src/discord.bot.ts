@@ -16,7 +16,7 @@ import { prefix } from "../config/config.json";
 
 let client: any = new Discord.Client();
 client.commands = new Discord.Collection();
-
+// move this to file
 async function gracefulExit(sig: string, code: number = 0) {
   logger.info(`Recieved ${sig}`);
   logger.info("Attemping to gracefully exit...");
@@ -34,7 +34,8 @@ async function gracefulExit(sig: string, code: number = 0) {
     shutdown((error: any) => {
       if (error) {
         code = 2;
-        console.error(`errors were encountered while closing the logger\n${error}`);
+        console.error(`errors were encountered while closing the logger`);
+        console.error(error);
       }
       setImmediate(() => {
         process.exit(code);
@@ -59,8 +60,8 @@ client.on("warn", (info: string) => {
 });
 
 process.on("uncaughtException", (error) => {
-  logger.error(`uncaughtException:\nTHIS${error}`);
-  gracefulExit("SIGTERM", 1);
+  logger.error(error)
+ // gracefulExit("SIGTERM", 1);
 });
 
 process.on("exit", (code) => {
