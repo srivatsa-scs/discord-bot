@@ -16,11 +16,11 @@ export async function connectDB() {
 
   database = mongoose.connection;
 
-  database.once("connecting", () => {
+  database.on("connecting", () => {
     logger.debug(`Initiated connection to MongoDB`);
   });
 
-  database.once("disconnecting", () => {
+  database.on("disconnecting", () => {
     logger.debug(`Initiated disconnection from MongoDB`);
   });
 
