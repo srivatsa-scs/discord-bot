@@ -1,5 +1,4 @@
-import * as dotenv from "dotenv";
-dotenv.config({ path: `${process.cwd()}/.env` });
+import "dotenv/config";
 import { logger } from "./logger/log4js.adapter";
 import { shutdown } from "log4js";
 logger.info(
@@ -60,8 +59,8 @@ client.on("warn", (info: string) => {
 });
 
 process.on("uncaughtException", (error) => {
-  logger.error(error)
- // gracefulExit("SIGTERM", 1);
+  logger.error(error);
+  // gracefulExit("SIGTERM", 1);
 });
 
 process.on("exit", (code) => {
@@ -83,7 +82,7 @@ const cooldowns = new Discord.Collection();
 
 client.once("ready", async () => {
   connectDB();
-  logger.info(`Connected to Discord`);
+  logger.info(`Discord Connected`);
   reactionCollector(client);
   uploaderFunction(client);
   client.user.setActivity("!command --help");

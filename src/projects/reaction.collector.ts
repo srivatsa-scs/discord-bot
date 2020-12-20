@@ -1,5 +1,7 @@
 import config from "../../config/config.json";
+import { logger } from "../logger/log4js.adapter";
 const firstMessage = require("./first.message");
+
 module.exports = (client: any) => {
   const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;
   const reactions = ["✅"]; // Add additional options here
@@ -14,12 +16,10 @@ module.exports = (client: any) => {
     const emoji = reaction._emoji.name;
     const { guild } = reaction.message;
     const roleId = config.CUSTOM_ROLE_ID;
-    const member = guild.members.cache.find(
-      (member: any) => member.id === user.id
-    );
+    const member = guild.members.cache.find((member: any) => member.id === user.id);
     if (add) {
       member.roles.add(roleId);
-      console.log(member.roles.cache.keys());
+      logger.info(member.roles.cache.keys());
     } else member.roles.remove(roleId);
   };
 
