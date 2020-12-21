@@ -124,7 +124,12 @@ module.exports = {
 					break;
 			}
 
-			const embed = new MessageEmbed().setTitle(args[1]).setURL(args[3]).setThumbnail(classMap.get(thumbnail).url).setTimestamp().setColor(classMap.get(thumbnail).color);
+			const embed = new MessageEmbed()
+				.setTitle(args[1])
+				.setURL(args[3])
+				.setThumbnail(classMap.get(thumbnail).url)
+				.setTimestamp()
+				.setColor(classMap.get(thumbnail).color);
 			message.delete({ timeout: 5000 });
 			message.channel.send(embed);
 		}

@@ -43,10 +43,17 @@ module.exports = {
 				}
 			}
 		} else {
-			formattedFields.push({ name: '❌ API Key not found ❌', value: `Beep-Boop, You don't have any API keys stored with me. Use !gw2 add <Enter-your-api-key> to add an API key.` });
+			formattedFields.push({
+				name: '❌ API Key not found ❌',
+				value: `Beep-Boop, You don't have any API keys stored with me. Use !gw2 add <Enter-your-api-key> to add an API key.`,
+			});
 		}
 
-		let embed: MessageEmbed = new MessageEmbed().setTitle('Raids').addFields(formattedFields).setTimestamp().setThumbnail('https://wiki.guildwars2.com/images/5/5e/Legendary_Insight.png');
+		let embed: MessageEmbed = new MessageEmbed()
+			.setTitle('Raids')
+			.addFields(formattedFields)
+			.setTimestamp()
+			.setThumbnail('https://wiki.guildwars2.com/images/5/5e/Legendary_Insight.png');
 		return client.users.cache.get(discordUserId)!.send(embed);
 	},
 };

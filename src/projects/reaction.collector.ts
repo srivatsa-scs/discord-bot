@@ -1,6 +1,6 @@
 import config from '../../config/config.json';
 const firstMessage = require('./first.message');
-module.exports = (client: any) => {
+export default (client: any) => {
 	const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;
 	const reactions = ['✅']; // Add additional options here
 

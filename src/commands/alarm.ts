@@ -1,4 +1,4 @@
-import { logger } from '../adapter/winston.adapter';
+import { logger } from '../adapter/log4js.adapter';
 
 module.exports = {
 	name: 'alarm',
@@ -56,7 +56,7 @@ module.exports = {
 					replyMessage += `${args[i]} `;
 				}
 			}
-			setTimeout(() => {
+			let timeoutObj = setTimeout(() => {
 				logger.info(`Alarm successfully executed for (${message.author.id})`);
 				for (let i = 0; i < 5; i++) {
 					client.users.cache.get(message.author.id).send(`<@!${message.author.id}> ${replyMessage}`);

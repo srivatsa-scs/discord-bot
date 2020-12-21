@@ -1,47 +1,23 @@
 import * as Discord from 'discord.js';
-const config = require('../config/config.json');
+import * as config from '../config/config.json';
 import * as fs from 'fs';
-import { logger } from './adapter/winston.adapter';
-import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
-
+import { logger } from './adapter/log4js.adapter';
+import { connectDB } from './mongodb/mongo.adapter';
+import { client, cooldowns } from './adapter/discord.adapter';
+import reactionCollector from './projects/reaction.collector';
+import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
+import { gracefulExit } from './the.end.process';
 require('dotenv').config();
+
 logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
-const reactionCollector = require('./projects/reaction.collector');
-import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
-const { prefix } = require('../config/config.json');
-
-let client: any = new Discord.Client();
-client.commands = new Discord.Collection();
-
-async function gracefulExit(sig: string) {
-	logger.info(`Recieved ${sig}`);
-	logger.info('Attemping to Gracefully exit...');
-	try {
-		await closeFileWatcher();
-		logger.info('My watch has ended.');
-		client.destroy();
-		logger.info(`Discord Client Connection Closed.`);
-		await disconnectDB();
-	} catch (err: any) {
-		logger.error(err);
-		logger.info('Exiting with code: 1');
-		process.exit(1);
-	} finally {
-		logger.info('Exiting with code: 0');
-		process.exit(0);
-	}
-}
-
 // Works with all
-process.on('SIGINT', (signal: string) => {
-	gracefulExit(signal);
+const sigs = ['SIGINT', 'SIGTERM'];
+sigs.forEach((sig: string) => {
+	process.on(sig, async () => {
+		await gracefulExit(sig);
+	});
 });
-
-// Non windows
-process.on('SIGTERM', (signal: string) => {
-	gracefulExit(signal);
-}); // Non Windows only
 
 const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
@@ -50,14 +26,12 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
-const cooldowns = new Discord.Collection();
 
 client.once('ready', async () => {
 	connectDB();
 	logger.info(`Connected to Discord`);
 	reactionCollector(client);
 	uploaderFunction(client);
-	client.user.setActivity('!command --help');
 });
 
 try {
@@ -68,9 +42,9 @@ try {
 }
 
 client.on('message', (message: any) => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName);
 
@@ -99,16 +73,16 @@ client.on('message', (message: any) => {
 	if (args[0] === '--help' || args[0] === '-h') {
 		let helpFields: Array<any> = [];
 		for (let i = 0; i < command.usage.length; i++) {
-			helpFields[i] = { name: `${prefix}${command.name} ${command.usage[i]}`, value: `${command.tooltip[i]}` };
+			helpFields[i] = { name: `${config.prefix}${command.name} ${command.usage[i]}`, value: `${command.tooltip[i]}` };
 		}
-		const responseEmbed = new Discord.MessageEmbed().setColor('77ffff').setTitle(`${prefix}${command.name} Help`).addFields(helpFields).setTimestamp();
+		const responseEmbed = new Discord.MessageEmbed().setColor('77ffff').setTitle(`${config.prefix}${command.name} Help`).addFields(helpFields).setTimestamp();
 		return message.reply(responseEmbed);
 	}
 	/* Does it require arguments */
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
 		if (command.usage) {
-			reply += `\n Usage: \`${prefix}${command.name} ${command.usage}`;
+			reply += `\n Usage: \`${config.prefix}${command.name} ${command.usage}`;
 		}
 		return message.channel.send(reply);
 	}

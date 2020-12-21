@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import axios from 'axios';
 export async function getCompletedRaids(validApiKey: string): Promise<Array<string>> {
 	const baseUrl: string = 'https://api.guildwars2.com/v2/account/raids?access_token=';

@@ -5,7 +5,7 @@ import fs from 'fs';
 const axios = require('axios').default;
 import * as config from '../../config/config.json';
 import boss from '../resources/bossmap';
-import { arcDpsLogLogger, logger } from '../adapter/winston.adapter';
+import { arcdpsLogger, logger } from '../adapter/log4js.adapter';
 
 function timeFormatter(time: number): string {
 	let formattedTime: string = '';
@@ -55,16 +55,16 @@ export function uploaderFunction(client: any) {
 				)
 				.setFooter(`ArcDps Version: ${resp.data.evtc.version}`)
 				.setTimestamp();
-			arcDpsLogLogger.info(`Log was successfully uploaded for Boss: ${fightname} by user ${metaData.data.recordedBy || 'Unknown'}`);
+			arcdpsLogger.info(`Log was successfully uploaded for Boss: ${fightname} by user ${metaData.data.recordedBy || 'Unknown'}`);
 			client.channels.cache.get(logChannelId).send(embed);
 		} catch (err: any) {
 			if (err.response.status === 403 && err.response.data.error === 'Encounter is too short for a useful report to be made') {
-				arcDpsLogLogger.error(`Log was not uploaded because ${err.response.data.error}`);
+				arcdpsLogger.error(`Log was not uploaded because ${err.response.data.error}`);
 				return;
 			} else if (err.response.status === 523) {
-				arcDpsLogLogger.error(`Upload failed due to Cloudflare error ${path}`);
+				arcdpsLogger.error(`Upload failed due to Cloudflare error ${path}`);
 			} else {
-				arcDpsLogLogger.error(err);
+				arcdpsLogger.error(err);
 			}
 		}
 	});

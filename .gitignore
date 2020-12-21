@@ -7,3 +7,5 @@ node_modules/
 logs/
 # Dist
 dist/
+# Prettier
+.prettierrc.json
