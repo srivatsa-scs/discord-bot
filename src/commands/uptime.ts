@@ -15,7 +15,12 @@ module.exports = {
 			let minutes = Math.floor((t / 60) % 60);
 			let hours = Math.floor((t / 3600) % 24);
 			let days = Math.floor(t / 86400);
-			return `My uptime is: ${days > 0 ? days + 'd ' : ''}${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+			let num = Math.random();
+			if (num < 0.01) {
+				return `Up-time-funk-you-up, uptime funk you up`;
+			} else {
+				return `My uptime is: ${days > 0 ? days + 'd ' : ''}${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+			}
 		}
 	},
 };
