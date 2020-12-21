@@ -12,11 +12,10 @@ require('dotenv').config();
 logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
 // Works with all
-const sigs = ['SIGINT', 'SIGTERM'];
-sigs.forEach((sig: string) => {
-	process.on(sig, async () => {
-		await gracefulExit(sig);
-	});
+const sigs: any = ['SIGINT', 'SIGTERM'];
+
+process.on(sigs, async () => {
+	await gracefulExit('SIGINT');
 });
 
 const commandFiles = fs
