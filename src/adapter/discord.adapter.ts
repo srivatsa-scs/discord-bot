@@ -1,21 +1,25 @@
 import Discord from 'discord.js';
 import { logger } from './log4js.adapter';
 import { setDiscordStatus } from '../resources/discord.status';
-import { exec } from 'child_process';
+
 const client: any = new Discord.Client();
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
-const discordErrorEvents: Array<string> = ['rateLimit', 'shardError', 'invalidated', 'error'];
+const discordErrorEvents: Array<string> = ['rateLimit', 'shardError', 'invalidated', 'error', 'shardReconnecting', 'shardDisconnect'];
+const discordInfoEvents: Array<string> = ['shardResume', 'shardReady'];
 
-client.on('ready', () => {
-	setDiscordStatus();
+discordInfoEvents.forEach((infoEvent: any) => {
+	client.on(infoEvent, () => {
+		logger.info(infoEvent);
+		setDiscordStatus();
+	});
 });
 client.on('debug', (info: any) => {
-	logger.debug(info);
+	logger.debug('debug', info);
 });
 client.on('warn', (warn: any) => {
-	logger.warn(warn);
+	logger.warn('warn', warn);
 });
 discordErrorEvents.forEach((event: string) => {
 	client.on(event, (err: Error) => {

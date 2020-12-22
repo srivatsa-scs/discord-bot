@@ -1,6 +1,6 @@
 import { configure, getLogger } from 'log4js';
 
-const pattern = '%[* [%d{yyyy-MM-dd hh:mm:ss.SSS TZO}] (%p):%] %m';
+const pattern = '%[[%d{yyyy-MM-dd hh:mm:ss.SSS TZO}] (%p):%] %m';
 configure({
 	appenders: {
 		main: {
