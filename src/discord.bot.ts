@@ -13,7 +13,6 @@ logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${proces
 
 // Works with all
 const sigs: Array<string> = ['SIGINT', 'SIGTERM'];
-
 sigs.forEach((signal: any) => {
 	process.on(signal, async () => {
 		await gracefulExit(signal);
@@ -35,14 +34,9 @@ client.once('ready', async () => {
 	uploaderFunction(client);
 });
 
-(async () => {
-	try {
-		const test = await client.login(config.token);
-	} catch (err: any) {
-		logger.error('Failed to connect to discord');
-		logger.error(err);
-	}
-})();
+client.login(config.token).catch((err: any) => {
+	logger.error('Failed to connect to discord\n', err);
+});
 
 client.on('message', (message: any) => {
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
