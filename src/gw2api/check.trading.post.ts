@@ -11,13 +11,13 @@ async function _getMetaData(id: number) {
 	};
 }
 
-function _coinHandler(coins: number) {
+export function _coinHandler(coins: number) {
 	if (coins < 1) {
 		return;
 	} else {
 		const copper = coins % 100;
 		const silver = ((coins % 10000) - copper) / 100;
-		const gold = ((coins % 1000000) - silver * 100 - copper) / 10000;
+		const gold = (coins - silver * 100 - copper) / 10000;
 		return {
 			gold,
 			silver,
