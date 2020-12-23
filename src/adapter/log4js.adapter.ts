@@ -7,16 +7,26 @@ function configureLogger(format: string, isEnableCallStack: boolean) {
 	const logConfig = {
 		appenders: {
 			main: {
-				type: 'file',
+				type: 'dateFile',
 				filename: './logs/main.log',
+				pattern: '.yyyy-MM-dd',
+				compress: true,
+				daysToKeep: 7,
+				keepFileExt: true,
+				maxLogSize: 10485760, // 10 MB
 				layout: {
 					type: 'pattern',
 					pattern: format,
 				},
 			},
 			arcdps: {
-				type: 'file',
+				type: 'dateFile',
 				filename: './logs/arcdps.log',
+				pattern: '.yyyy-MM-dd',
+				compress: true,
+				daysToKeep: 7,
+				keepFileExt: true,
+				maxLogSize: 10485760, // 10 MB
 			},
 			console: {
 				type: 'stdout',
