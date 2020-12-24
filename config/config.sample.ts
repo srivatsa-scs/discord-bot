@@ -1,3 +1,4 @@
+//prettier-ignore
 export default {
 	prefix: '!',
 	token: 'ENTER_DISCORD_BOT_TOKEN_HERE',
@@ -12,5 +13,5 @@ export default {
 	CUSTOM_ROLE_ID: 'CUSTOM_ROLE_THAT_IS_APPLIED_ON_REACTING',
 	GW2_ACC_NAME: 'GuildWars2.1234',
 	GW2_API_KEY: 'ENTER_YOUR_GW2_API_KEY_HERE',
-	logLevel: 'info',
-};
+	logLevel: 'info'
+}

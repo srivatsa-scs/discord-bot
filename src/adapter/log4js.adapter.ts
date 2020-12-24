@@ -79,12 +79,12 @@ wotcher.on('change', async (path: string, stats: any) => {
 		if (err) {
 			console.error(err);
 		} else {
-			setImmediate(() => {
+			setImmediate(async () => {
 				console.log('Shutting down log4js to reconfigure...');
-				const configFile = fs.readFile('./config/config.ts', 'utf8', (err: any, data: any) => {
-					const newConfig = JSON.parse(data);
-					setLogLevel(newConfig.logLevel);
-				});
+				let configFile: string = fs.readFileSync('./config/config.ts', 'utf8');
+				let configFile2 = configFile.substring(34);
+				const newConfig = JSON.parse(configFile2);
+				setLogLevel(newConfig.logLevel);
 			});
 		}
 	});
