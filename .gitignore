@@ -1,5 +1,6 @@
 # Config
 config/config.ts
+config/config.json
 # Node Modules
 node_modules/
 /src/commands/roster.ts

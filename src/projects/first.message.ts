@@ -1,5 +1,5 @@
 import { Channel, Client, Message, MessageManager, TextChannel } from 'discord.js';
-import config from '../../config/config';
+import config from '../../config/config.json';
 
 const addReactions = (message: Message, reactions: Array<string>) => {
 	message.react(reactions[0]);

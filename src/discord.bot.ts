@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import * as Discord from 'discord.js';
-import config from '../config/config';
+import config from '../config/config.json';
 import * as fs from 'fs';
 import { logger } from './adapter/log4js.adapter';
 import { connectDB } from './mongodb/mongo.adapter';

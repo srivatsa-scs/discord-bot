@@ -1,4 +1,4 @@
-import config from '../../config/config';
+import config from '../../config/config.json';
 import { firstMessage } from './first.message';
 export default (client: any) => {
 	const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;

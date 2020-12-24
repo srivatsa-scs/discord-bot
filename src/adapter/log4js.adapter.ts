@@ -1,7 +1,7 @@
 import log4js from 'log4js';
 const { configure, getLogger, shutdown } = log4js;
 // import { configure, getLogger, shutdown } from 'log4js';
-import config from '../../config/config';
+import config from '../../config/config.json';
 import chokidar from 'chokidar';
 import fs from 'fs';
 
@@ -72,7 +72,7 @@ function setLogLevel(level: string) {
 	logger.info(`Log Level is now ${level}`);
 }
 
-const wotcher: chokidar.FSWatcher = chokidar.watch('./config/config.ts', { persistent: true }); // Path needs to be from package.json
+const wotcher: chokidar.FSWatcher = chokidar.watch('./config/config.json', { persistent: true }); // Path needs to be from package.json
 
 wotcher.on('change', async (path: string, stats: any) => {
 	shutdown((err: Error) => {
@@ -81,9 +81,8 @@ wotcher.on('change', async (path: string, stats: any) => {
 		} else {
 			setImmediate(async () => {
 				console.log('Shutting down log4js to reconfigure...');
-				let configFile: string = fs.readFileSync('./config/config.ts', 'utf8');
-				let configFile2 = configFile.substring(34);
-				const newConfig = JSON.parse(configFile2);
+				let configFile: string = fs.readFileSync('./config/config.json', 'utf8');
+				const newConfig = JSON.parse(configFile);
 				setLogLevel(newConfig.logLevel);
 			});
 		}
