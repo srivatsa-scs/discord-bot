@@ -94,11 +94,3 @@ client.on('message', (message: any) => {
 		message.reply('An error occoured, this is a unhelpful error message.');
 	}
 });
-
-client.on('error', (err: Error) => {
-	logger.error(err);
-});
-
-client.on('warn', (info: string) => {
-	logger.info(info);
-});
