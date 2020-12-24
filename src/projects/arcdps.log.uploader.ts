@@ -1,9 +1,9 @@
 import chokidar from 'chokidar';
 import { MessageEmbed } from 'discord.js';
-const FormData = require('form-data');
+import FormData from 'form-data';
 import fs from 'fs';
-const axios = require('axios').default;
-import * as config from '../../config/config.json';
+import axios from 'axios';
+import config from '../../config/config';
 import boss from '../resources/bossmap';
 import { arcdpsLogger, logger } from '../adapter/log4js.adapter';
 
@@ -35,7 +35,7 @@ export function uploaderFunction(client: any) {
 	const metaDataUrl: string = `https://dps.report/getJson?permalink=`;
 
 	watcher.on('add', async (path: any) => {
-		let form = FormData();
+		let form = new FormData();
 		form.append('file', fs.createReadStream(path));
 
 		try {

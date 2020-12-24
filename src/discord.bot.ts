@@ -1,5 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import * as Discord from 'discord.js';
-import * as config from '../config/config.json';
+import config from '../config/config';
 import * as fs from 'fs';
 import { logger } from './adapter/log4js.adapter';
 import { connectDB } from './mongodb/mongo.adapter';
@@ -7,7 +9,6 @@ import { client, cooldowns } from './adapter/discord.adapter';
 import reactionCollector from './projects/reaction.collector';
 import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
 import { gracefulExit } from './the.end.process';
-require('dotenv').config();
 
 logger.info(`ENV: ${process.env.NODE_ENV} | PID: ${process.pid} | ARCH: ${process.arch}`);
 
@@ -23,8 +24,8 @@ const commandFiles = fs
 	.readdirSync(process.env.NODE_ENV == 'production' ? './dist/src/commands' : './src/commands')
 	.filter((file) => file.endsWith(process.env.NODE_ENV == 'production' ? '.js' : '.ts'));
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+	const command = await import(`./commands/${file}`);
+	client.commands.set(command.default.name, command.default);
 }
 
 client.once('ready', async () => {

@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js';
 import fs from 'fs';
 
-module.exports = {
+export default {
 	name: 'commands',
 	description: 'lists all commands',
 	cooldown: 5,

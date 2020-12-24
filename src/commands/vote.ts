@@ -1,6 +1,6 @@
 import { Client, Collection, Message, MessageReaction, Snowflake, User } from 'discord.js';
 
-module.exports = {
+export default {
 	name: 'vote',
 	description: 'thumbs up thumbs down',
 	guildOnly: true,

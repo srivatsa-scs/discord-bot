@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js';
 import { logger } from '../adapter/log4js.adapter';
 
-module.exports = {
+export default {
 	name: 'crash',
 	description: 'Throws an error',
 	cooldown: 5,

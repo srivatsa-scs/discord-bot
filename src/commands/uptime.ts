@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 
-module.exports = {
+export default {
 	name: 'uptime',
 	description: 'Uptime',
 	guildOnly: true,

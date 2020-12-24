@@ -1,5 +1,5 @@
 import { Channel, Client, Message, MessageManager, TextChannel } from 'discord.js';
-import * as config from '../../config/config.json';
+import config from '../../config/config';
 
 const addReactions = (message: Message, reactions: Array<string>) => {
 	message.react(reactions[0]);
@@ -9,7 +9,7 @@ const addReactions = (message: Message, reactions: Array<string>) => {
 	}
 };
 
-module.exports = async (client: Client, id: string, text: string, reactions: Array<string>) => {
+export async function firstMessage(client: Client, id: string, text: string, reactions: Array<string>) {
 	const channel: any = await client.channels.fetch(id);
 	const messages: any = await channel.messages.fetch();
 
@@ -34,4 +34,4 @@ module.exports = async (client: Client, id: string, text: string, reactions: Arr
 		messages.get(messageArray[0]).edit(text);
 		addReactions(messages.last(), reactions);
 	}
-};
+}

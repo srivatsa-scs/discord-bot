@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as config from '../../config/config.json';
+import config from '../../config/config';
 import { fetchGw2AccName } from '../gw2api/find.account.name';
 import UserModel from './user.model';
 import { logger } from '../adapter/log4js.adapter';

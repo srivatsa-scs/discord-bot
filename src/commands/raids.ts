@@ -3,7 +3,7 @@ import { getCompletedRaids } from '../gw2api/check.completed.raids';
 import { findAllApiKeys } from '../mongodb/mongo.adapter';
 import { awaitUserReaction } from '../projects/await.choice';
 import totalRaids from '../resources/raid.map';
-module.exports = {
+export default {
 	name: 'raids',
 	description: 'allows to check which raid wings are not still completed',
 	cooldown: 5,

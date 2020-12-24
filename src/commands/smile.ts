@@ -1,6 +1,6 @@
 import { Client, Message } from 'discord.js';
 
-module.exports = {
+export default {
 	name: 'smile',
 	description: 'reacts with a smiley',
 	cooldown: 5,

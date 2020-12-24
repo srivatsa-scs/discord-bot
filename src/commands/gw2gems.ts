@@ -1,5 +1,5 @@
 import { getGoldToGems } from '../gw2api/goldtogems';
-module.exports = {
+export default {
 	name: 'gw2gems',
 	description: 'Gives gold to gems conversion rate for 400💎',
 	guildOnly: true,

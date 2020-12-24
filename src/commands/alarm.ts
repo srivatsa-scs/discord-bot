@@ -1,6 +1,6 @@
 import { logger } from '../adapter/log4js.adapter';
 
-module.exports = {
+export default {
 	name: 'alarm',
 	description: 'It sets an alarm!',
 	cooldown: 5,

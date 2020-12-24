@@ -3,9 +3,10 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
 		"start": "ts-node ./src/discord.bot.ts",
-		"dev": "nodemon -x ts-node ./src/discord.bot.ts",
+		"dev": "node --loader ts-node/esm --experimental-specifier-resolution=node ./src/discord.bot.ts",
 		"build": "tsc --build . tsconfig.json"
 	},
 	"author": "",
