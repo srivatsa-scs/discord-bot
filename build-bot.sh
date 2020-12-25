@@ -10,8 +10,8 @@ if [ "${NODE_ENV}" = "production" ] ; then
     && npm run build \
     && rm -r ${BOT_HOME}/src \
     && mv ./dist/src ./src \
-    && rm -r ./dist
-    && npm prune --production 
+    && rm -r ./dist \
+    && npm prune --production ;
 elif [ "${NODE_ENV}" = "development" ] ; then
     npm install -D
 else
