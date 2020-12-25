@@ -9,6 +9,8 @@ dist
 # Prettier
 .prettierrc.json
 discordbot.dockerfile
+Dockerfile
+dockerfile
 .env
 .editorconfig
 docker-compose.yml

@@ -7,14 +7,13 @@ pwd
 
 if [ "${NODE_ENV}" = "production" ] ; then 
     npm install --production=false \
-    && npm install -g typescript \
     && npm run build \
-    && rm -r ${BOT_HOME}/src \
+    && rm -r ./src \
     && mv ./dist/src ./src \
     && rm -r ./dist \
     && npm prune --production ;
 elif [ "${NODE_ENV}" = "development" ] ; then
-    npm install -D
+    npm install --production=false
 else
     echo "ERROR build failed probably because i dont have access to env variables"
     exit 1
