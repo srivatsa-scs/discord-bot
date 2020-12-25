@@ -1,7 +1,7 @@
 import { Channel, Client, Message, MessageManager, TextChannel } from 'discord.js';
 import loggers from '../adapter/log4js.adapter';
 const { logger } = loggers;
-import config from '../config/config.json';
+import config from '../../config/config.json';
 
 const addReactions = (message: Message, reactions: Array<string>) => {
 	message.react(reactions[0]);

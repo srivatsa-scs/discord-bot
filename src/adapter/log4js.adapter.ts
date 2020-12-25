@@ -1,6 +1,6 @@
 import log4js from 'log4js';
 const { configure, getLogger, shutdown } = log4js;
-import config from '../config/config.json';
+import config from '../../config/config.json';
 import chokidar from 'chokidar';
 import fs from 'fs';
 

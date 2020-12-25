@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import loggers from './adapter/log4js.adapter';
 const { logger } = loggers;
-import config from './config/config.json';
+import config from '../config/config.json';
 const { PREFIX, TOKEN } = config;
 logger.info(`ENV: ${process.env.NODE_ENV} | OS: ${process.platform} | PID: ${process.pid} | ARCH: ${process.arch} | LOG_LEVEL: ${logger.level}`);
 import { client, cooldowns } from './adapter/discord.adapter';

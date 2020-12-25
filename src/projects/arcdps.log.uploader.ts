@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import FormData from 'form-data';
 import fs from 'fs';
 import axios from 'axios';
-import config from '../config/config.json';
+import config from '../../config/config.json';
 import boss from '../resources/bossmap';
 import loggers from '../adapter/log4js.adapter';
 const { logger, arcdpsLogger } = loggers;
