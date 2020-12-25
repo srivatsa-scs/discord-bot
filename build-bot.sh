@@ -7,6 +7,7 @@ pwd
 
 if [ "${NODE_ENV}" = "production" ] ; then 
     npm install --production=false \
+    && npm install -g typescript \
     && npm run build \
     && rm -r ${BOT_HOME}/src \
     && mv ./dist/src ./src \
