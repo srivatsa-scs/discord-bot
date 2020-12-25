@@ -2,6 +2,9 @@
 
 NODE_ENV=$(echo "${NODE_ENV}" | tr '[:upper:]' '[:lower:]')
 
+ls -la
+pwd
+
 if [ "${NODE_ENV}" = "production" ] ; then 
     npm install -D \
     && npm run build \
