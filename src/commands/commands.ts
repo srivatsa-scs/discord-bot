@@ -8,13 +8,14 @@ export default {
 	guildOnly: true,
 	usage: [' '],
 	tooltip: ['Displays a list of commands.'],
-	execute(client: Client, message: Message, args: Array<string>) {
+	execute(client: any, message: Message, args: Array<string>) {
 		const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
 		let commands: string = '';
-		commandFiles.forEach((file: any) => {
-			commands += `!${file.substr(0, file.length - 3)} `;
+
+		client.commands.forEach((value: any, key: any) => {
+			commands += `!${key} `;
 		});
-		/* Currently only works if file names are the same as commands */
+
 		message.channel.send(`<@!${message.author.id}> here are the list of commands: ${commands}`);
 	},
 };
