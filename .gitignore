@@ -1,0 +1,14 @@
+# Config
+config.json
+# Node Modules
+node_modules
+# Logs
+logs
+# Dist
+dist
+# Prettier
+.prettierrc.json
+discordbot.dockerfile
+.env
+.editorconfig
+docker-compose.yml
