@@ -8,7 +8,7 @@ logger.info(`ENV: ${process.env.NODE_ENV} | OS: ${process.platform} | PID: ${pro
 import { client, cooldowns } from './adapter/discord.adapter';
 import Discord from 'discord.js';
 import fs from 'fs';
-import { gracefulExit } from './the.end.process';
+import { gracefulExit } from './end.process';
 import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
 import reactionCollector from './projects/reaction.collector';
 import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
@@ -40,9 +40,12 @@ process
 	});
 
 const commandsDir = new URL('./commands', import.meta.url);
-const commandFiles = fs.readdirSync(commandsDir.pathname);
+import { fileURLToPath } from 'url';
+const __dirname = fileURLToPath(commandsDir);
+const commandFiles = fs.readdirSync(__dirname);
+
 for (const file of commandFiles) {
-	const command = await import(path.join(commandsDir.pathname, file));
+	const command = await import(path.join(commandsDir.href, file));
 	client.commands.set(command.default.name, command.default);
 }
 
