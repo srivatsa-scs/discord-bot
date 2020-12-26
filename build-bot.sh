@@ -2,9 +2,7 @@
 
 NODE_ENV=$(echo "${NODE_ENV}" | tr '[:upper:]' '[:lower:]')
 
-ls -la
-pwd
-echo "Environment set to ${NODE_ENV}"
+echo "Environment set to : ${NODE_ENV}"
 
 if [ "${NODE_ENV}" = "production" ] ; then 
     npm install --production=false \
