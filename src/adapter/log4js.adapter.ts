@@ -31,6 +31,10 @@ function configureLoggers(format: string, level: string, isEnableCallStack: bool
 				daysToKeep: 7,
 				keepFileExt: true,
 				maxLogSize: 10485760, // 10 MB
+				layout: {
+					type: 'pattern',
+					pattern: format,
+				},
 			},
 			console: {
 				type: 'stdout',
