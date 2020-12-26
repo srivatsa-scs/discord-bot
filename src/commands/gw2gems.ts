@@ -9,6 +9,6 @@ export default {
 	async execute(client: any, message: any, args: any) {
 		const resp: any = await getGoldToGems();
 
-		message.channel.send(`400💎 = ${resp!.gold}g ${resp!.silver}s ${resp!.copper}c`);
+		message.channel.send(`400 Gems = ${resp!.gold}g ${resp!.silver}s ${resp!.copper}c`);
 	},
 };

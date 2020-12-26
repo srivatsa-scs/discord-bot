@@ -5,7 +5,8 @@ import fs from 'fs';
 import axios from 'axios';
 import config from '../../config/config.json';
 import boss from '../resources/bossmap';
-import { arcdpsLogger, logger } from '../adapter/log4js.adapter';
+import loggers from '../adapter/log4js.adapter';
+const { logger, arcdpsLogger } = loggers;
 
 function timeFormatter(time: number): string {
 	let formattedTime: string = '';
@@ -64,7 +65,8 @@ export function uploaderFunction(client: any) {
 			} else if (err.response.status === 523) {
 				arcdpsLogger.error(`Upload failed due to Cloudflare error ${path}`);
 			} else {
-				arcdpsLogger.error(err);
+				arcdpsLogger.error(`Response status : ${err.response.status} - ${err.response.statusText}`, err.response.data);
+				arcdpsLogger.debug(err);
 			}
 		}
 	});

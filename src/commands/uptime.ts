@@ -17,7 +17,7 @@ export default {
 			let days = Math.floor(t / 86400);
 			let num = Math.random();
 			if (num < 0.01) {
-				return `Up-time-funk-you-up, uptime funk you up`;
+				return `Up-time-funk-you-up, Uptime funk you up.`;
 			} else {
 				return `My uptime is: ${days > 0 ? days + 'd ' : ''}${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
 			}

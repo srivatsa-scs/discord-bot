@@ -1,5 +1,6 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import classMap from '../resources/class.icon.map';
+
 export default {
 	name: 'build',
 	description: 'formats builds in an embed format',

@@ -28,7 +28,6 @@ export function _coinHandler(coins: number) {
 async function _itemHandler(items: Array<{ id: number; count: number }>) {
 	if (items.length === 0) return [];
 	else {
-		// console.log(items);
 		let returnItems: Array<any> = [];
 		for (let item of items) {
 			const metaDataResponse: any = await _getMetaData(item.id);
@@ -42,7 +41,6 @@ async function _itemHandler(items: Array<{ id: number; count: number }>) {
 export async function checkTradingPost(token: string) {
 	const reqUrl: string = `${tradingPostUrl}?access_token=${token}`;
 	const resp: any = await axios.get(reqUrl);
-	// console.log(resp.data);
 
 	const totalCoins = _coinHandler(resp.data.coins);
 	const totalItems = await _itemHandler(resp.data.items);

@@ -3,6 +3,9 @@ import { validateGw2ApiToken } from '../gw2api/check.apikey.perms';
 import { findAllApiKeys, insertApiKey, removeApiKey } from '../mongodb/mongo.adapter';
 import insertResponseDecoder from '../mongodb/insert.response.decoder';
 import { awaitUserReaction } from '../projects/await.choice';
+import loggers from '../adapter/log4js.adapter';
+const { logger } = loggers;
+
 export default {
 	name: 'gw2',
 	description: 'used to add and remove api keys',
@@ -34,12 +37,12 @@ export default {
 			if (dbResp.length > 0) {
 				const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
 				const deleteResp = await removeApiKey(dbResp[choice]._id, discordUserId);
-				console.log(dbResp[choice], deleteResp);
-
 				if (deleteResp) {
 					formattedFields.push({ name: dbResp[choice].accName, value: 'Removed Successfully' });
+					logger.info(`API key removed for user (${discordUserId})`);
 				} else {
 					formattedFields.push({ name: dbResp[choice].accName, value: 'Error Occoured while removing' });
+					logger.error(`Failed to remove API key removed for user (${discordUserId})`);
 				}
 			} else {
 				formattedFields.push({ name: '❌ API Key not found ❌', value: `You don't have any API keys stored with me` });

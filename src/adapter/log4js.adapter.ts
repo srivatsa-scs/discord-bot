@@ -1,11 +1,13 @@
 import log4js from 'log4js';
 const { configure, getLogger, shutdown } = log4js;
-// import { configure, getLogger, shutdown } from 'log4js';
 import config from '../../config/config.json';
 import chokidar from 'chokidar';
 import fs from 'fs';
 
-function configureLogger(format: string, isEnableCallStack: boolean) {
+const loggers: any = new Object();
+const defaultLogLevel: string = 'info';
+
+function configureLoggers(format: string, level: string, isEnableCallStack: boolean) {
 	const logConfig = {
 		appenders: {
 			main: {
@@ -29,6 +31,10 @@ function configureLogger(format: string, isEnableCallStack: boolean) {
 				daysToKeep: 7,
 				keepFileExt: true,
 				maxLogSize: 10485760, // 10 MB
+				layout: {
+					type: 'pattern',
+					pattern: format,
+				},
 			},
 			console: {
 				type: 'stdout',
@@ -41,35 +47,44 @@ function configureLogger(format: string, isEnableCallStack: boolean) {
 		categories: {
 			main: {
 				appenders: ['main', 'console'],
-				level: 'info',
+				level: level,
 				enableCallStack: isEnableCallStack,
 			},
 			arcdps: {
 				appenders: ['arcdps', 'console'],
-				level: 'info',
+				level: level,
+				enableCallStack: isEnableCallStack,
 			},
-			default: { appenders: ['console'], level: 'info' },
+			default: { appenders: ['console'], level: level },
 		},
 	};
 	return configure(logConfig);
 }
 
-function setLogLevel(level: string) {
-	switch (level?.toLowerCase()) {
-		case 'trace':
-			configureLogger('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %p ]%] : %m%n%s', true);
-			break;
-
-		case 'debug':
-			configureLogger('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %f:%l:%o | %p ]%] : %m', true);
-			break;
-
-		default:
-			configureLogger('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | %p ]%] : %m', false);
+export function initLoggers(level: string = defaultLogLevel) {
+	try {
+		switch (level.toLowerCase()) {
+			case 'trace':
+				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %p ]%] : %m%n%s', level, true);
+				break;
+			case 'debug':
+				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %f:%l:%o | %p ]%] : %m', level, true);
+				break;
+			default:
+				level = defaultLogLevel;
+				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | %p ]%] : %m', level, false);
+		}
+	} finally {
+		if (Object.keys(loggers).length > 0) {
+			Object.values(loggers).forEach((logger: any) => {
+				if (level.toLowerCase() !== logger.level.levelStr.toLowerCase()) {
+					logger.level = level;
+				}
+				logger.info(`Log level for ${logger.category} set to ${logger.level}`);
+			});
+		}
+		return;
 	}
-	logger.level = level;
-	arcdpsLogger.level = level;
-	logger.info(`Log Level is now ${level}`);
 }
 
 const wotcher: chokidar.FSWatcher = chokidar.watch('./config/config.json', { persistent: true }); // Path needs to be from package.json
@@ -82,13 +97,23 @@ wotcher.on('change', async (path: string, stats: any) => {
 			setImmediate(async () => {
 				console.log('Shutting down log4js to reconfigure...');
 				let configFile: string = fs.readFileSync('./config/config.json', 'utf8');
-				const newConfig = JSON.parse(configFile);
-				setLogLevel(newConfig.logLevel);
+				try {
+					const newConfig = JSON.parse(configFile);
+					initLoggers(newConfig.LOG_LEVEL);
+				} catch (err: any) {
+					console.log(`Error while trying to configure loggers`, err);
+				}
 			});
 		}
 	});
 });
 
-export const logger = getLogger('main');
-export const arcdpsLogger = getLogger('arcdps');
-setLogLevel(config.logLevel);
+// Initialize the loggers by calling log4js configure and setting log level if loggers exist
+initLoggers(config.LOG_LEVEL);
+
+// Get loggers
+loggers.logger = getLogger('main');
+loggers.arcdpsLogger = getLogger('arcdps');
+
+//export default loggers;
+export default loggers;

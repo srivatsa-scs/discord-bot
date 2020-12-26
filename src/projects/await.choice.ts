@@ -1,3 +1,5 @@
+import loggers from '../adapter/log4js.adapter';
+const { logger } = loggers;
 import emoji from './get.emoji.map';
 import emojiNumber from './get.emoji.number';
 
@@ -33,7 +35,7 @@ export async function awaitUserReaction(client: any, discordUserId: string, choi
 	for (let i = 0; i < choices.length; i++) {
 		question += `${emoji.get(i)}: ${choices[i].accName}\n`;
 	}
-	// console.debug(discordUserId);
+	logger.debug(`Discord UserID:${discordUserId}`);
 	const responseMessage = await client.users.cache.get(discordUserId).send(question);
 	for (let i = 0; i < choices.length; i++) {
 		await responseMessage.react(emoji.get(i));
@@ -42,11 +44,7 @@ export async function awaitUserReaction(client: any, discordUserId: string, choi
 		const collector = await responseMessage.awaitReactions(filter, { max: 1, time: 15000, errors: ['time'] });
 		return emojiNumber.get(collector.first().emoji.name);
 	} catch (err) {
-		console.log(err);
+		logger.error(err);
 		return 0;
 	}
-
-	// collector.on('collect', (reaction: any) => {
-	// 	return emojiNumber.get(reaction.emoji.name);
-	// });
 }

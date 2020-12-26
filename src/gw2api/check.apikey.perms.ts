@@ -1,4 +1,6 @@
 import axios from 'axios';
+import loggers from '../adapter/log4js.adapter';
+const { logger } = loggers;
 
 const validTokenUrl: string = 'https://api.guildwars2.com/v2/tokeninfo';
 
@@ -13,7 +15,7 @@ export async function validateGw2ApiToken(token: string): Promise<boolean> {
 		}
 	} catch (err: any) {
 		if (err.response.status !== 401) {
-			console.log(err);
+			logger.error(`Trading Post Error, Status ${err.response.status}, ${err.response.statusText}`);
 		}
 		return false;
 	}

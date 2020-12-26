@@ -1,4 +1,5 @@
-import { logger } from '../adapter/log4js.adapter';
+import loggers from '../adapter/log4js.adapter';
+const { logger } = loggers;
 
 export default {
 	name: 'alarm',

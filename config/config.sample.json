@@ -1,6 +1,6 @@
 {
-	"prefix": "!",
-	"token": "ENTER_DISCORD_BOT_TOKEN_HERE",
+	"PREFIX": "!",
+	"TOKEN": "ENTER_DISCORD_BOT_TOKEN_HERE",
 	"DPS_REPORT_USER_TOKEN": "ENTER_DPS_REPORT_USERTOKEN",
 	"DPS_REPORT_FILES": "C:/Users/<windows-username>/Documents/Guild Wars 2/addons/arcdps/arcdps.cbtlogs/",
 	"MONGO_URI": "MONGO_DB_URI_TO_STORE_API_KEYS",
@@ -12,5 +12,5 @@
 	"CUSTOM_ROLE_ID": "CUSTOM_ROLE_THAT_IS_APPLIED_ON_REACTING",
 	"GW2_ACC_NAME": "GuildWars2.1234",
 	"GW2_API_KEY": "ENTER_YOUR_GW2_API_KEY_HERE",
-	"logLevel": "info"
+	"LOG_LEVEL": "info"
 }

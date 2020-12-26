@@ -1,9 +1,9 @@
 import config from '../../config/config.json';
 import { firstMessage } from './first.message';
+
 export default (client: any) => {
 	const channelId = config.REACTION_COLLECTOR_CHANNEL_ID;
 	const reactions = ['✅']; // Add additional options here
-
 	let emojiText = 'Add reaction to sign up for this weeks raid\n';
 	emojiText += `✅ = Sign Up\n`; // Text
 

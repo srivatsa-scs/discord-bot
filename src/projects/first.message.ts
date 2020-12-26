@@ -1,4 +1,6 @@
 import { Channel, Client, Message, MessageManager, TextChannel } from 'discord.js';
+import loggers from '../adapter/log4js.adapter';
+const { logger } = loggers;
 import config from '../../config/config.json';
 
 const addReactions = (message: Message, reactions: Array<string>) => {
@@ -28,7 +30,7 @@ export async function firstMessage(client: Client, id: string, text: string, rea
 		addReactions(resp, reactions);
 	} else if (firstMessage.author.id != config.DISCORD_BOT_CLIENT_ID) {
 		// If the channel is not empty and the first message is not by the bot, do nothing basically
-		console.log('First message not created by bot');
+		logger.info('First message not created by bot');
 	} else if (firstMessage.author.id == config.DISCORD_BOT_CLIENT_ID) {
 		// If the channel is not empty and the first message is by the bot, edit to say whatever you want.
 		messages.get(messageArray[0]).edit(text);

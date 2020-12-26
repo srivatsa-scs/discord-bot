@@ -1,12 +1,20 @@
 # Config
-config/config.ts
-config/config.json
+config.json
 # Node Modules
-node_modules/
-/src/commands/roster.ts
+node_modules
 # Logs
-logs/
+logs
 # Dist
-dist/
+dist
 # Prettier
 .prettierrc.json
+#Other
+.env
+.editorconfig
+# Docker
+discordbot.dockerfile
+Dockerfile
+dockerfile
+docker-compose.yml
+build-bot.sh
+start-bot.sh
