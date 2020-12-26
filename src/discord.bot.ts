@@ -13,6 +13,7 @@ import { connectDB, disconnectDB } from './mongodb/mongo.adapter';
 import reactionCollector from './projects/reaction.collector';
 import { uploaderFunction, closeFileWatcher } from './projects/arcdps.log.uploader';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const sigs: Array<string> = ['SIGINT', 'SIGTERM', 'SIGUSR2'];
 
@@ -40,7 +41,6 @@ process
 	});
 
 const commandsDir = new URL('./commands', import.meta.url);
-import { fileURLToPath } from 'url';
 const __dirname = fileURLToPath(commandsDir);
 const commandFiles = fs.readdirSync(__dirname);
 

@@ -6,15 +6,15 @@ node_modules
 logs
 # Dist
 dist
+# Env
+.env*
 # Prettier
 .prettierrc.json
-#Other
-.env
 .editorconfig
-# Docker
+# Docker files
 discordbot.dockerfile
 Dockerfile
 dockerfile
 docker-compose.yml
-build-bot.sh
 start-bot.sh
+build-bot.sh
