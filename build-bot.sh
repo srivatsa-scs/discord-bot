@@ -6,13 +6,13 @@ ls -la
 pwd
 
 if [ "${NODE_ENV}" = "production" ] ; then 
-    npm install --production=false \
-    && npm list \
-    && npm run build \
-    && rm -r ./src \
-    && mv ./dist/src ./src \
-    && rm -r ./dist \
-    && npm prune --production ;
+    npm install --production=false
+    npm list
+    npm run build
+    rm -r ./src
+    mv ./dist/src ./src
+    rm -r ./dist
+    npm prune --production ;
 elif [ "${NODE_ENV}" = "development" ] ; then
     npm install --production=false ;
 else
