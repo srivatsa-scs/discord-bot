@@ -4,14 +4,15 @@ NODE_ENV=$(echo "${NODE_ENV}" | tr '[:upper:]' '[:lower:]')
 
 ls -la
 pwd
+echo "Environment set to ${NODE_ENV}"
 
 if [ "${NODE_ENV}" = "production" ] ; then 
-    npm install --production=false
-    npm list
-    npm run build
-    rm -r ./src
-    mv ./dist/src ./src
-    rm -r ./dist
+    npm install --production=false;
+    npm list;
+    npm run build;
+    rm -r ./src;
+    mv ./dist/src ./src;
+    rm -r ./dist;
     npm prune --production ;
 elif [ "${NODE_ENV}" = "development" ] ; then
     npm install --production=false ;
