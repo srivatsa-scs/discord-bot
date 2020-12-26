@@ -76,7 +76,7 @@ export function uploaderFunction(client: any) {
 			} else if (err.response.status === 523) {
 				arcdpsLogger.error(`Upload failed due to Cloudflare error ${path}`);
 			} else {
-				arcdpsLogger.error(err.data);
+				arcdpsLogger.error(`Response status : ${err.response.status} - ${err.response.statusText}`, err.response.data);
 				arcdpsLogger.debug(err);
 			}
 		}
