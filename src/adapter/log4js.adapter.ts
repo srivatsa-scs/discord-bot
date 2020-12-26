@@ -53,6 +53,7 @@ function configureLoggers(format: string, level: string, isEnableCallStack: bool
 			arcdps: {
 				appenders: ['arcdps', 'console'],
 				level: level,
+				enableCallStack: isEnableCallStack,
 			},
 			default: { appenders: ['console'], level: level },
 		},
