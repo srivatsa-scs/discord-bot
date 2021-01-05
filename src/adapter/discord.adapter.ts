@@ -9,30 +9,22 @@ client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
 const discordErrorEvents: Array<string> = ['rateLimit', 'shardError', 'error'];
-const discordInfoEvents: Array<string> = [
-	'allReady',
-	'ready',
-	'resumed',
-	'shardReady',
-	'shardDisconnect',
-	'shardReconnecting',
-	'shardResume',
-	'shardReconnecting',
-];
+const discordInfoEvents: Array<string> = ['allReady', 'ready', 'resumed', 'shardReady', 'shardDisconnect'];
+const discordDebugEvents: Array<string> = ['shardReconnecting', 'shardResume'];
 
 client
 	.on('shardReady', (info?: any) => {
 		setDiscordStatus();
 	})
-	.on('debug', (info?: any) => {
-		logger.debug(info ? info : '');
-	})
 	.on('warn', (warn?: any) => {
-		logger.warn(warn ? warn : '');
+		logger.warn(warn);
 	})
 	.on('invalidated', (err?: any) => {
 		logger.fatal(err ? err : '');
 		gracefulExit('SIGTERM', 130);
+	})
+	.on('debug', (info?: any) => {
+		logger.debug(info);
 	});
 
 discordErrorEvents.forEach((event: string) => {
@@ -44,6 +36,12 @@ discordErrorEvents.forEach((event: string) => {
 discordInfoEvents.forEach((event: string) => {
 	client.on(event, (info?: any) => {
 		logger.info(event, info ? info : '');
+	});
+});
+
+discordDebugEvents.forEach((event: string) => {
+	client.on(event, (info?: any) => {
+		logger.debug(event, info ? info : '');
 	});
 });
 
