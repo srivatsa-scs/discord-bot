@@ -16,9 +16,15 @@ export default {
 
 		const dbResp: any = await findAllApiKeys(discordUserId);
 		if (dbResp.length > 0) {
-			const choice: any = await awaitUserReaction(client, discordUserId, dbResp);
+			let choice: any;
+			let resp: any;
 			/* No Args provided */
-			const resp = await maingw2(dbResp[choice].apiKey);
+			if (dbResp.length === 1) {
+				resp = await maingw2(dbResp[0].apiKey);
+			} else {
+				choice = await awaitUserReaction(client, discordUserId, dbResp);
+				resp = await maingw2(dbResp[choice].apiKey);
+			}
 
 			if (resp!.totalCoins === undefined && resp!.totalItems.length === 0) {
 				formattedFields.push({ name: 'You have nothing', value: 'Jon Snow' });
