@@ -65,14 +65,14 @@ export function initLoggers(level: string = defaultLogLevel) {
 	try {
 		switch (level.toLowerCase()) {
 			case 'trace':
-				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %p ]%] : %m%n%s', level, true);
+				configureLoggers('%[[ %d{yyyy-MM-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %p ]%] : %m%n%s', level, true);
 				break;
 			case 'debug':
-				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %f:%l:%o | %p ]%] : %m', level, true);
+				configureLoggers('%[[ %d{yyyy-MM-dd hh:mm:ss.SSS O} | %c | PID:%z on %h | %f:%l:%o | %p ]%] : %m', level, true);
 				break;
 			default:
 				level = defaultLogLevel;
-				configureLoggers('%[[ %d{yyyy-mm-dd hh:mm:ss.SSS O} | %c | %p ]%] : %m', level, false);
+				configureLoggers('%[[ %d{yyyy-MM-dd hh:mm:ss.SSS O} | %c | %p ]%] : %m', level, false);
 		}
 	} finally {
 		if (Object.keys(loggers).length > 0) {
