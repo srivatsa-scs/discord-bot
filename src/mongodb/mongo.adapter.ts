@@ -16,8 +16,8 @@ export async function connectDB() {
 
 	database = mongoose.connection;
 
-	const mongoDebugEvents: Array<string> = ['disconnecting', 'connecting'];
-	const mongoInfoEvents: Array<string> = ['reconnected', 'close', 'disconnected', 'connected'];
+	const mongoDebugEvents: Array<string> = ['reconnected', 'disconnecting', 'connecting'];
+	const mongoInfoEvents: Array<string> = ['close', 'disconnected', 'connected'];
 	const mongoErrorEvents: Array<string> = ['error', 'reconnectFailed'];
 
 	mongoErrorEvents.forEach((event: string) => {
