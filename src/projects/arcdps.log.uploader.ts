@@ -22,7 +22,7 @@ function timeFormatter(time: number): string {
 }
 
 const logPath: string = `${config.DPS_REPORT_FILES}**/*.${config.ARC_DPS_LOG_FILE_EXTENSION}`;
-const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true });
+const watcher = chokidar.watch(logPath, { persistent: true, ignoreInitial: true, usePolling: true });
 logger.info('Initializing File Watcher');
 
 export async function closeFileWatcher() {
@@ -42,11 +42,11 @@ export function uploaderFunction(client: any) {
 		try {
 			const resp: any = await axios.post(uploadUrl, form, { headers: form.getHeaders() });
 			const metaData: any = await axios.get(`${metaDataUrl}${resp.data.permalink.substring(19)}`);
-			const fightname = `${metaData.data.fightName}${resp.data.encounter.isCM ? ' CM' : ''}`;
+			const fightname = `${metaData.data.fightName}${metaData.data.isCM ? ' CM' : ''}`;
 
 			const embed = new MessageEmbed()
 				.setColor(resp.data.encounter.success ? '#00ff00' : '#ff0000')
-				.setTitle(`${fightname}`)
+				.setTitle(fightname)
 				.setURL(resp.data.permalink)
 				.setThumbnail(metaData.data.fightIcon || boss.get(resp.data.encounter.bossId).thumbnail)
 				.addFields(
